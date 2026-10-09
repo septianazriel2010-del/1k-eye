@@ -47,7 +47,8 @@ export function renderSceneShots(
   if (!scene || scene.shots.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'scene-shot-empty';
-    empty.textContent = 'No shots yet. Use CAPTURE SHOT to save current look.';
+    empty.textContent =
+      'Belum ada gambar. Gunakan AMBIL GAMBAR untuk menyimpan tampilan saat ini.';
     element.appendChild(empty);
     return;
   }
@@ -61,14 +62,14 @@ export function renderSceneShots(
     const label = document.createElement('div');
     label.className = 'scene-shot-label';
     label.textContent = shot.title;
-    label.title = 'Double-click to rename';
+    label.title = 'Klik dua kali untuk mengganti nama';
     listen(label, 'click', () => select(shot.id));
     listen(label, 'dblclick', () => {
       if (label.children.length) return;
       const input = document.createElement('input');
       input.type = 'text';
       input.className = 'scene-shot-rename';
-      input.setAttribute('aria-label', 'Shot name');
+      input.setAttribute('aria-label', 'Nama gambar');
       input.value = shot.title;
       let finished = false;
       const finish = (save) => {
@@ -96,11 +97,11 @@ export function renderSceneShots(
     actions.className = 'scene-shot-actions';
     const loadButton = document.createElement('button');
     loadButton.className = 'scene-shot-btn';
-    loadButton.textContent = 'LOAD';
+    loadButton.textContent = 'MUAT';
     listen(loadButton, 'click', () => load(scene.id, shot.id));
     const deleteButton = document.createElement('button');
     deleteButton.className = 'scene-shot-btn scene-shot-danger';
-    deleteButton.textContent = 'DEL';
+    deleteButton.textContent = 'HAPUS';
     listen(deleteButton, 'click', () => remove(scene.id, shot.id));
     actions.appendChild(loadButton);
     actions.appendChild(deleteButton);
@@ -108,9 +109,18 @@ export function renderSceneShots(
     top.appendChild(actions);
     const meta = document.createElement('div');
     meta.className = 'scene-shot-meta';
-    const mode = shot.visual?.detection?.mode || 'OFF';
-    const style = shot.visual?.style || 'normal';
-    meta.textContent = `${style.toUpperCase()} · ${mode} · ${shot.durationSec.toFixed(1)}s + ${shot.holdSec.toFixed(1)}s`;
+    const mode = shot.visual?.detection?.mode || 'NONAKTIF';
+    const style =
+      {
+        normal: 'NORMAL',
+        retro: 'CRT',
+        surveillance: 'PENGAWASAN',
+        thermal: 'TERMAL',
+        anime: 'ANIME',
+        noir: 'NOIR',
+        snow: 'SALJU',
+      }[shot.visual?.style] || 'NORMAL';
+    meta.textContent = `${style} · ${mode} · ${shot.durationSec.toFixed(1)} dtk + ${shot.holdSec.toFixed(1)} dtk`;
     row.appendChild(top);
     row.appendChild(meta);
     element.appendChild(row);

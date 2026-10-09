@@ -86,19 +86,19 @@ export function _settleCctvFrame(token, src, ok) {
 export function _syncCctvSourceBadge(activeCamera, enabled) {
   if (!this._cctvSourceBadge) return;
   if (!enabled || !activeCamera) {
-    this._cctvSourceBadge.textContent = 'SOURCE · UNKNOWN';
+    this._cctvSourceBadge.textContent = 'SUMBER · TIDAK DIKETAHUI';
     this._cctvSourceBadge.dataset.frameState = 'idle';
     return;
   }
   const hasDisplayedFrame =
     this._cctvFrameWrap?.classList.contains('has-frame');
   if (this._cctvFrame?.dataset.loading === 'true' && !hasDisplayedFrame) {
-    this._cctvSourceBadge.textContent = 'FRAME · LOADING';
+    this._cctvSourceBadge.textContent = 'BINGKAI · MEMUAT';
     this._cctvSourceBadge.dataset.frameState = 'loading';
     return;
   }
   if (this._cctvFrame?.dataset.error === 'true' && !hasDisplayedFrame) {
-    this._cctvSourceBadge.textContent = 'FRAME · UNAVAILABLE';
+    this._cctvSourceBadge.textContent = 'BINGKAI · TIDAK TERSEDIA';
     this._cctvSourceBadge.dataset.frameState = 'error';
     return;
   }

@@ -1625,10 +1625,10 @@ test('installation summaries disclose viewport-scoped coverage', () => {
   const unavailable = summarizeInstallationViewport([], { available: false, stale: false });
   assert.equal(unavailable.reason, 'feed unavailable');
   const retrying = summarizeInstallationViewport([], { available: false, stats: {
-    statusMessage: 'Overpass temporarily unavailable — retrying in 30s',
+    statusMessage: 'Overpass untuk sementara tidak tersedia — coba lagi dalam 30 dtk',
   } });
   assert.equal(retrying.count, null, 'retrying is not a claim of zero mapped sites');
-  assert.equal(retrying.reason, 'Overpass temporarily unavailable — retrying in 30s');
+  assert.equal(retrying.reason, 'Overpass untuk sementara tidak tersedia — coba lagi dalam 30 dtk');
 });
 
 test('installation summaries name a subject window instead of the viewport', () => {

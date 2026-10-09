@@ -2,11 +2,11 @@ import { createCctvVideoSurface } from './cctvVideo.js';
 export function _calBadgeLabel(badge) {
   switch (badge) {
     case 'calibrated':
-      return 'CALIBRATED';
+      return 'TERKALIBRASI';
     case 'curated':
-      return 'CURATED';
+      return 'TERKURASI';
     case 'raw-prior':
-      return 'RAW PRIOR';
+      return 'BAWAAN MENTAH';
     default:
       return '--';
   }
@@ -51,7 +51,7 @@ export function _renderCctvState(state) {
 
   if (this._cctvEnableBtn) {
     this._cctvEnableBtn.classList.toggle('active', enabled);
-    this._cctvEnableBtn.textContent = enabled ? 'CCTV ON' : 'CCTV OFF';
+    this._cctvEnableBtn.textContent = enabled ? 'CCTV AKTIF' : 'CCTV NONAKTIF';
   }
 
   if (this._cctvSelect) {
@@ -99,17 +99,19 @@ export function _renderCctvState(state) {
     this._cctvCoverageBtn.classList.toggle('active', mode !== 'off');
     this._cctvCoverageBtn.textContent =
       mode === 'viewshed'
-        ? 'VIEWSHED ON'
+        ? 'PANDANGAN CAKUPAN AKTIF'
         : mode === 'on'
-          ? 'COVERAGE ON'
-          : 'COVERAGE OFF';
+          ? 'CAKUPAN AKTIF'
+          : 'CAKUPAN NONAKTIF';
     this._cctvCoverageBtn.disabled = !enabled;
   }
 
   if (this._cctvAutoHopBtn) {
     const autoHop = !!state?.autoHop;
     this._cctvAutoHopBtn.classList.toggle('active', autoHop);
-    this._cctvAutoHopBtn.textContent = autoHop ? 'AUTO HOP ON' : 'AUTO HOP OFF';
+    this._cctvAutoHopBtn.textContent = autoHop
+      ? 'PINDAH OTOMATIS AKTIF'
+      : 'PINDAH OTOMATIS NONAKTIF';
     this._cctvAutoHopBtn.disabled = !enabled;
   }
 
@@ -117,8 +119,8 @@ export function _renderCctvState(state) {
     const showProjection = state?.showProjection !== false;
     this._cctvProjectionBtn.classList.toggle('active', showProjection);
     this._cctvProjectionBtn.textContent = showProjection
-      ? 'PROJECTION ON'
-      : 'PROJECTION OFF';
+      ? 'PROYEKSI AKTIF'
+      : 'PROYEKSI NONAKTIF';
     this._cctvProjectionBtn.disabled = !enabled;
   }
 
@@ -133,7 +135,7 @@ export function _renderCctvState(state) {
     const badge = activeCamera?.calBadge || null;
     const dirty = !!activeCamera?.calDirty;
     this._cctvQualityChip.textContent = dirty
-      ? 'CAL · EDITED (UNSAVED)'
+      ? 'KAL · DIUBAH (BELUM DISIMPAN)'
       : `CAL · ${this._calBadgeLabel(badge)}`;
     this._cctvQualityChip.dataset.calBadge = dirty ? 'edited' : badge || '';
   }
@@ -145,7 +147,7 @@ export function _renderCctvState(state) {
       const provider =
         activeCamera.sourceLabel ||
         activeCamera.provider ||
-        'Configured Source';
+        'Sumber terkonfigurasi';
       const statusMsg = activeCamera.sourceMessage
         ? ` · ${activeCamera.sourceMessage}`
         : '';
@@ -154,14 +156,16 @@ export function _renderCctvState(state) {
       const calBadge = activeCamera.calBadge
         ? this._calBadgeLabel(activeCamera.calBadge)
         : '';
-      const projLabel = state?.showProjection !== false ? 'MONITOR' : 'OFF';
-      this._cctvMeta.textContent = `${activeCamera.city} · HDG ${Math.round(activeCamera.headingDeg)}° · FOV ${Math.round(activeCamera.fovDeg)}° · RANGE ${Math.round(activeCamera.rangeM)}m · ${projLabel}${calBadge ? ` · ${calBadge}` : ''} · ${provider}${credit}${statusMsg}`;
+      const projLabel =
+        state?.showProjection !== false ? 'MONITOR' : 'NONAKTIF';
+      this._cctvMeta.textContent = `${activeCamera.city} · ARAH ${Math.round(activeCamera.headingDeg)}° · FOV ${Math.round(activeCamera.fovDeg)}° · JANGKAUAN ${Math.round(activeCamera.rangeM)}m · ${projLabel}${calBadge ? ` · ${calBadge}` : ''} · ${provider}${credit}${statusMsg}`;
     } else if (cameras.length > 0) {
       this._cctvMeta.textContent = enabled
-        ? `${cameras.length} cameras loaded · click a camera to activate`
-        : `${cameras.length} cameras loaded · enable CCTV to activate`;
+        ? `${cameras.length} kamera dimuat · klik kamera untuk mengaktifkan`
+        : `${cameras.length} kamera dimuat · aktifkan CCTV untuk melanjutkan`;
     } else {
-      this._cctvMeta.textContent = 'Enable CCTV to load camera intersections';
+      this._cctvMeta.textContent =
+        'Aktifkan CCTV untuk memuat persimpangan kamera';
     }
   }
 
@@ -211,13 +215,13 @@ export function _renderCctvState(state) {
   this._syncCctvSourceBadge(activeCamera, enabled);
   this._typeCctvSummary(
     state?.summary ||
-      'Enable CCTV to start camera-linked intelligence summaries.',
+      'Aktifkan CCTV untuk memulai ringkasan informasi dari kamera.',
   );
 }
 
 export function _typeCctvSummary(text) {
   if (this.destroyed || !this._cctvSummary) return;
-  const nextText = String(text || '').trim() || 'No summary available.';
+  const nextText = String(text || '').trim() || 'Ringkasan tidak tersedia.';
   if (nextText === this._lastCctvSummaryText) return;
   this._lastCctvSummaryText = nextText;
 
@@ -249,7 +253,7 @@ export function _updateCctvSyncChip(loading, enabled) {
     clearTimeout(this._cctvChipHideTimer);
     this._cctvChipHideTimer = null;
     this._cctvChipWasBusy = true;
-    this.actions.setSplitFlapText(this._cctvSyncLabel, 'loading frames');
+    this.actions.setSplitFlapText(this._cctvSyncLabel, 'memuat bingkai kamera');
     // The counter is left plain on purpose: it ticks every few frames
     // during a grid load, and flapping it would read as a slot machine.
     this._cctvSyncProgress.textContent = `${loaded}/${total}`;
@@ -260,7 +264,7 @@ export function _updateCctvSyncChip(loading, enabled) {
   if (this._cctvChipWasBusy && enabled && total > 0) {
     // Load just completed — flash the final count, then auto-hide.
     this._cctvChipWasBusy = false;
-    this.actions.setSplitFlapText(this._cctvSyncLabel, 'camera grid ready');
+    this.actions.setSplitFlapText(this._cctvSyncLabel, 'jaringan kamera siap');
     this._cctvSyncProgress.textContent = `${total}/${total}`;
     this._cctvSyncChip.classList.add('visible');
     clearTimeout(this._cctvChipHideTimer);

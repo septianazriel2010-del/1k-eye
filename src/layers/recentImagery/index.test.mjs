@@ -188,7 +188,7 @@ test('a refused box is loud, says its size and persists until a box succeeds; so
     f.layer.setBox({ west: 0, south: 0, east: 20, north: 20 }),
     false,
   );
-  assert.match(f.snap().boxError, /^Box is 2,226 km wide · limit 1,000 km$/);
+  assert.match(f.snap().boxError, /^Area selebar 2,226 km · batas 1,000 km$/);
   assert.equal(f.snap().error, null, 'a box refusal is not a layer error');
   assert.equal(f.catalog.searches.length, 0);
   assert.equal(
@@ -205,7 +205,7 @@ test('a refused box is loud, says its size and persists until a box succeeds; so
     east: 18000000,
     north: 8000000,
   });
-  assert.match(f.snap().boxError, /^Box is [\d,]+ km wide/);
+  assert.match(f.snap().boxError, /^Area selebar [\d,]+ km/);
   assert.equal(f.snap().box, null);
   assert.equal(f.layer.setBox(BOX), true);
   assert.equal(f.snap().boxError, null);
@@ -497,7 +497,7 @@ test('a refused lease is guidance and the images still drape without a swipe', a
   const f = fixture({ controller: fakeController({ refuse: true }) });
   await f.ready();
   f.layer.setMode('basemap');
-  assert.equal(f.snap().error, 'Comparison in use by another scene');
+  assert.equal(f.snap().error, 'Perbandingan sedang digunakan adegan lain');
   assert.deepEqual(f.drapes(), { a: `${S18}|none`, b: null });
   f.layer.clearPreview();
   assert.equal(f.snap().error, null, 'nothing shown, nothing refused');
@@ -509,7 +509,10 @@ test('a lease that cannot reach the Esri map never shows the divider and says wh
   f.layer.setMode('basemap');
   await settleTimes();
   assert.equal(f.snap().comparison.active, false);
-  assert.equal(f.snap().error, 'Esri map unavailable · no swipe');
+  assert.equal(
+    f.snap().error,
+    'Peta Esri tidak tersedia · usap tidak dapat digunakan',
+  );
   assert.equal(f.owned().a.splitDirection, 'none');
 });
 
@@ -569,7 +572,7 @@ test('a manual switch to Google 3D while a day is shown takes Esri back once and
   assert.deepEqual(f.drapes(), { a: `${S18}|left`, b: `${L16}|right` });
   assert.equal(
     f.snap().notice,
-    'Imagery stays on Esri · CLEAR to use Google 3D',
+    'Citra tetap menggunakan Esri · HAPUS untuk memakai Google 3D',
   );
   assert.equal(f.snap().error, null);
   // Once per switch generation: a repeated notification is not a new
@@ -604,7 +607,7 @@ test('CLEAR after a re-lease hands Google 3D back and does not take Esri again',
   assert.equal(controller.calls.length, 4);
   assert.equal(controller.acquisitions, acquisitions, 'no new lease');
   assert.equal(f.diag().lease, false);
-  assert.equal(f.snap().notice, 'Box and images cleared');
+  assert.equal(f.snap().notice, 'Area dan citra dihapus');
 });
 
 test('disable after a re-lease hands Google 3D back and does not take Esri again', async () => {
@@ -630,10 +633,10 @@ test('a re-lease refused by another owner says so, drapes without a swipe and do
   await controller.setStack('photoreal');
   await settleTimes(8);
   assert.equal(controller.acquisitions, 2, 'one attempt');
-  assert.equal(f.snap().error, 'Comparison in use by another scene');
+  assert.equal(f.snap().error, 'Perbandingan sedang digunakan adegan lain');
   assert.notEqual(
     f.snap().notice,
-    'Imagery stays on Esri · CLEAR to use Google 3D',
+    'Citra tetap menggunakan Esri · HAPUS untuk memakai Google 3D',
   );
   assert.equal(f.snap().comparison.active, false);
   assert.equal(f.owned().a.kind, 'tileset');
@@ -658,11 +661,11 @@ test('without a lease (another owner held it first) a switch to Google 3D takes 
   const f = fixture({ controller, hostKind: 'tileset' });
   await f.ready();
   f.layer.setMode('basemap');
-  assert.equal(f.snap().error, 'Comparison in use by another scene');
+  assert.equal(f.snap().error, 'Perbandingan sedang digunakan adegan lain');
   await controller.setStack('photoreal');
   await settleTimes(8);
   assert.deepEqual(controller.calls, [['setStack', 'photoreal']]);
-  assert.equal(f.snap().error, 'Comparison in use by another scene');
+  assert.equal(f.snap().error, 'Perbandingan sedang digunakan adegan lain');
 });
 
 /**
@@ -779,10 +782,13 @@ for (const path of ['subscription', 'stats poll']) {
     assert.equal(f.snap().comparison.active, false);
     assert.deepEqual(f.drapes(), { a: `${S18}|none`, b: `${L16}|none` });
     assert.equal(f.owned().a.kind, 'tileset');
-    assert.equal(f.snap().error, 'Esri map unavailable · no swipe');
+    assert.equal(
+      f.snap().error,
+      'Peta Esri tidak tersedia · usap tidak dapat digunakan',
+    );
     assert.notEqual(
       f.snap().notice,
-      'Imagery stays on Esri · CLEAR to use Google 3D',
+      'Citra tetap menggunakan Esri · HAPUS untuk memakai Google 3D',
     );
     // More polls, renders and dead Esri listeners never retry.
     failEsriTiles();
@@ -808,7 +814,7 @@ for (const path of ['subscription', 'stats poll']) {
     assert.deepEqual(f.drapes(), { a: `${S18}|left`, b: `${L16}|right` });
     assert.equal(
       f.snap().notice,
-      'Imagery stays on Esri · CLEAR to use Google 3D',
+      'Citra tetap menggunakan Esri · HAPUS untuk memakai Google 3D',
     );
     assert.equal(f.snap().error, null);
     controller.destroy();
@@ -929,8 +935,8 @@ test('the data-panel row carries only the two source chips', async () => {
   assert.deepEqual(
     chips.map(({ id, label, active, params }) => [id, label, active, params]),
     [
-      ['hls', 'MORE DETAIL · 30 m', true, { hls: false }],
-      ['viirs', 'DAILY OVERVIEW · 250 m', false, { viirs: true }],
+      ['hls', 'DETAIL LEBIH BAIK · 30 m', true, { hls: false }],
+      ['viirs', 'RINGKASAN HARIAN · 250 m', false, { viirs: true }],
     ],
   );
   f.layer.setParams(chips[1].params);
@@ -958,7 +964,10 @@ test('USE VIEW takes the camera rectangle and refuses a view over the cap instea
   assert.ok(Math.abs(f.snap().box.west + 97.8) < 1e-9);
   f.viewer.camera.computeViewRectangle = view(-108, 20, -88, 40);
   assert.equal(f.layer.useCurrentView(), false);
-  assert.match(f.snap().boxError, /^View is 2,2\d\d km wide · limit 1,000 km$/);
+  assert.match(
+    f.snap().boxError,
+    /^Tampilan selebar 2,2\d\d km · batas 1,000 km$/,
+  );
   assert.equal(f.catalog.searches.length, 1, 'nothing searched');
   assert.ok(Math.abs(f.snap().box.west + 97.8) < 1e-9, 'the box is kept');
 });
@@ -1028,7 +1037,7 @@ test('ZOOM IN: an oversized box or view flies top-down to its centre at the heig
   assert.ok(Math.abs(deg(flights[2].destination.longitude) + 98) < 1e-9);
   assert.ok(Math.abs(deg(flights[2].destination.latitude) - 30) < 1e-9);
   // The box tool's own oversized drag carries its box.
-  f.layer.reportBoxRefusal('Box is 2,226 km wide · limit 1,000 km', {
+  f.layer.reportBoxRefusal('Area selebar 2,226 km · batas 1,000 km', {
     west: 0,
     south: 0,
     east: 20,
@@ -1310,7 +1319,7 @@ test('CLEAR forgets the box, pins, preview, pending pick, opacity, split and the
     ],
     [null, null, null, null, 1, 0.5, 'ab'],
   );
-  assert.equal(snapshot.notice, 'Box and images cleared');
+  assert.equal(snapshot.notice, 'Area dan citra dihapus');
   assert.equal(snapshot.sources.viirs, false);
   assert.equal(f.renderer.ownedCount(), 0);
   assert.equal(f.timers.armed(), 0);

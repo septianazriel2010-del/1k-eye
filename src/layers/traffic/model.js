@@ -11,6 +11,20 @@ import {
   JAM_DOT_FAR_SCALE,
 } from './policy.js';
 
+function localizedFlowError(message) {
+  const messages = {
+    'TomTom key unavailable': 'kunci TomTom tidak tersedia',
+    'TomTom daily budget reached': 'batas harian TomTom tercapai',
+    'TomTom upstream unreachable': 'server upstream TomTom tidak terjangkau',
+    'TomTom flow unavailable': 'data arus TomTom tidak tersedia',
+  };
+  if (messages[message]) return messages[message];
+  const httpError = /^TomTom flow error \(HTTP (\d+)\)$/.exec(message || '');
+  return httpError
+    ? `kesalahan arus TomTom (HTTP ${httpError[1]})`
+    : 'data arus TomTom tidak tersedia';
+}
+
 export function createModel({ state: layerState, services, parts, source }) {
   /** Build scene waypoints from source records; thinning and terrain remain rendering policy. */
   function parseRoads(roadData) {
@@ -251,7 +265,7 @@ export function createModel({ state: layerState, services, parts, source }) {
       // drops `loadingLabel` in its error branch, so the owner's SIMULATED copy
       // has to BE the error text or the steady state reverts to a bare
       // "TomTom daily budget reached" that never says what is on screen.
-      const degraded = `SIMULATED — ${flowError}`;
+      const degraded = `DISIMULASIKAN — ${localizedFlowError(flowError)}`;
       return { mode, error: degraded, loadingLabel: degraded };
     }
     // TomTom and Hybrid name their geometry; OpenStreetMap keeps its match copy.
@@ -260,10 +274,10 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? 'Syncing flow · Roads: TomTom'
+          ? 'Menyinkronkan arus · Jalan: TomTom'
           : coveragePct > 0
-            ? 'LIVE · Roads: TomTom · Roads without flow hidden'
-            : 'LIVE · Roads: TomTom · No flow roads in view',
+            ? 'LANGSUNG · Jalan: TomTom · Jalan tanpa arus disembunyikan'
+            : 'LANGSUNG · Jalan: TomTom · Tidak ada jalan berarus dalam tampilan',
       };
     }
     if (liveMode && roadSource === 'TomTom + OpenStreetMap') {
@@ -271,8 +285,8 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? `Syncing flow · Roads: ${roadSource}`
-          : `${coveragePct > 0 ? 'LIVE' : 'SIMULATED'} · Roads: ${roadSource} · Flow ${coveragePct}%`,
+          ? `Menyinkronkan arus · Jalan: ${roadSource}`
+          : `${coveragePct > 0 ? 'LANGSUNG' : 'DISIMULASIKAN'} · Jalan: ${roadSource} · Arus ${coveragePct}%`,
       };
     }
     if (liveMode) {
@@ -280,10 +294,10 @@ export function createModel({ state: layerState, services, parts, source }) {
         mode,
         error: null,
         loadingLabel: fetching
-          ? 'Syncing flow · Roads: OpenStreetMap · Flow: TomTom · Unmatched: simulated'
+          ? 'Menyinkronkan arus · Jalan: OpenStreetMap · Arus: TomTom · Tidak cocok: disimulasikan'
           : coveragePct > 0
-            ? `LIVE · Roads: OpenStreetMap · Flow: TomTom · ${coveragePct}% cov${coveragePct < 100 ? ' · Unmatched: simulated' : ''}`
-            : 'SIMULATED · Roads: OpenStreetMap · Flow: TomTom (no matches)',
+            ? `LANGSUNG · Jalan: OpenStreetMap · Arus: TomTom · Cakupan ${coveragePct}%${coveragePct < 100 ? ' · Tidak cocok: disimulasikan' : ''}`
+            : 'DISIMULASIKAN · Jalan: OpenStreetMap · Arus: TomTom (tidak ada kecocokan)',
       };
     }
     // Keyless simulation — one terse line that names the mode and the remedy
@@ -293,8 +307,8 @@ export function createModel({ state: layerState, services, parts, source }) {
       mode,
       error: null,
       loadingLabel: statusUnavailable
-        ? 'SIMULATED — traffic service unreachable'
-        : 'SIMULATED — add TomTom key for live',
+        ? 'DISIMULASIKAN — layanan lalu lintas tidak dapat dijangkau'
+        : 'DISIMULASIKAN — tambahkan kunci TomTom untuk data langsung',
     };
   }
 

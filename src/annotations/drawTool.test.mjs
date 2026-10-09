@@ -140,8 +140,10 @@ test('nothing promises a GeoJSON export for drawn shapes', () => {
   }
   for (const file of ['README.md', 'CHANGELOG.md', 'docs/CURRENT-STATE.md']) {
     const source = read(file);
-    const at = source.indexOf('DISPLAY ▸ **Draw**');
-    const start = at >= 0 ? at : source.indexOf('DISPLAY ▸ Draw');
+    const start =
+      ['TAMPILAN ▸ Gambar', 'DISPLAY ▸ **Draw**', 'DISPLAY ▸ Draw']
+        .map((heading) => source.indexOf(heading))
+        .find((index) => index >= 0) ?? -1;
     assert.ok(start >= 0, `${file} should describe the Draw control`);
     const section = source.slice(start, start + 1200);
     assert.doesNotMatch(

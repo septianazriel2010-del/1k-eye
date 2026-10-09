@@ -109,7 +109,7 @@ function presentViewer(state) {
     open: street.open === true,
     loading: street.loading === true && !street.imageId,
     renderMode: street.renderMode === 'fill' ? 'fill' : 'letterbox',
-    captionLeft: street.creator ? `Image by ${street.creator}` : '',
+    captionLeft: street.creator ? `Citra oleh ${street.creator}` : '',
     captionRight: right.join(' · '),
     link: street.externalUrl || null,
     linkLabel: street.providerLabel ? `${street.providerLabel} ↗` : '',

@@ -288,8 +288,8 @@ export function bindCameraOrientationControls({
       tiltButton?.setAttribute(
         'aria-label',
         next.tilted
-          ? 'Return map to straight-down view'
-          : 'Tilt map to oblique view',
+          ? 'Kembalikan peta ke tampilan tegak lurus'
+          : 'Miringkan peta ke tampilan oblik',
       );
     }
     if (!applied || applied.heading !== next.heading) {
@@ -297,7 +297,7 @@ export function bindCameraOrientationControls({
       northButton?.style?.setProperty('--camera-heading', `${next.heading}deg`);
       northButton?.setAttribute(
         'aria-label',
-        `Reset map to north up. Current heading ${next.heading} degrees`,
+        `Atur ulang arah peta ke utara. Arah saat ini ${next.heading} derajat`,
       );
     }
     applied = next;
@@ -323,7 +323,7 @@ export function bindCameraOrientationControls({
         : false;
     });
     if (result) {
-      showToast?.(result.tilted ? 'Tilted view' : 'Straight-down view');
+      showToast?.(result.tilted ? 'Tampilan miring' : 'Tampilan tegak lurus');
       // The action reports the state it just commanded, so the button can
       // follow it without a second pick.
       tilted = result.tilted;
@@ -342,7 +342,7 @@ export function bindCameraOrientationControls({
         })
       );
     });
-    if (result) showToast?.('North up');
+    if (result) showToast?.('Arah utara');
     sync();
   });
 

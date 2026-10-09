@@ -20,8 +20,8 @@ export function updateContext(info, heading) {
     this.pushCockpitSignal(
       'context-status',
       'info',
-      'CONTEXT STANDBY',
-      'ENABLE GLOBAL CONTEXT FOR PROXIMITY PINGS',
+      'KONTEKS SIAGA',
+      'AKTIFKAN KONTEKS GLOBAL UNTUK SINYAL TERDEKAT',
     );
     return;
   }
@@ -53,7 +53,7 @@ export function updateContext(info, heading) {
     this.context.dataset.state = 'lost';
     if (this.contextUncertainty) {
       this.contextUncertainty.textContent =
-        'CONTACT LOST · LAST KNOWN READOUT · NOT AN ALL-CLEAR';
+        'KONTAK HILANG · DATA TERAKHIR · BUKAN JAMINAN KEAMANAN';
     }
     // The cue changes the footer's height; re-run layout once on the way in
     // rather than every frame the contact stays lost.
@@ -61,8 +61,8 @@ export function updateContext(info, heading) {
     this.pushCockpitSignal(
       'context-status',
       'warning',
-      `CONTACT LOST · ${snapshot.subject.label || snapshot.subject.id || 'SUBJECT'}`,
-      'SUBJECT LEFT ITS FEED · READOUT HOLDING LAST KNOWN',
+      `KONTAK HILANG · ${snapshot.subject.label || snapshot.subject.id || 'SUBJEK'}`,
+      'SUBJEK TAK LAGI TERDETEKSI · MENAMPILKAN DATA TERAKHIR',
     );
     return;
   }
@@ -84,11 +84,11 @@ export function updateContext(info, heading) {
   if (this.contextNearestLabel) {
     this.contextNearestLabel.textContent = closest
       ? `${closest.cohort.label.toUpperCase()} · ${closestLabel}`
-      : 'NO AVAILABLE EXAMPLE';
+      : 'BELUM ADA CONTOH';
     this.contextNearestLabel.setAttribute(
       'aria-label',
       closest && closestLabel === '—'
-        ? `${closest.cohort.label}, Unavailable`
+        ? `${closest.cohort.label}, Tidak tersedia`
         : this.contextNearestLabel.textContent,
     );
   }
@@ -101,7 +101,7 @@ export function updateContext(info, heading) {
       'aria-label',
       Number.isFinite(distanceM)
         ? this.contextDistance.textContent
-        : 'Unavailable',
+        : 'Tidak tersedia',
     );
   }
 
@@ -133,15 +133,15 @@ export function updateContext(info, heading) {
     this.contextDirection.classList.toggle('unknown', relative === null);
   }
   if (this.contextBearing) {
-    if (relative === null) this.contextBearing.textContent = 'BRG —';
-    else if (Math.abs(relative) < 8) this.contextBearing.textContent = 'AHEAD';
+    if (relative === null) this.contextBearing.textContent = 'ARAH —';
+    else if (Math.abs(relative) < 8) this.contextBearing.textContent = 'DEPAN';
     else
       this.contextBearing.textContent = `${relative < 0 ? 'L' : 'R'} ${String(Math.round(Math.abs(relative))).padStart(3, '0')}°`;
   }
   if (this.contextUncertainty) {
     this.contextUncertainty.textContent = unknownCount
-      ? `${unknownCount} INPUT${unknownCount === 1 ? '' : 'S'} UNKNOWN · NOT AN ALL-CLEAR`
-      : 'AVAILABLE INPUTS CURRENT · NOT AN ALL-CLEAR';
+      ? `${unknownCount} MASUKAN TIDAK DIKETAHUI · BUKAN JAMINAN KEAMANAN`
+      : 'MASUKAN TERSEDIA TERKINI · BUKAN JAMINAN KEAMANAN';
   }
   if (this.contextUpdated) {
     this.contextUpdated.textContent = Number.isFinite(snapshot.evaluatedAt)

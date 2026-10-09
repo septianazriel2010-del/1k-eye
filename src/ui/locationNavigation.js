@@ -87,8 +87,9 @@ export class LocationNavigation {
       this._currentPoi = null;
       this._collapsePOIRow();
       this._updateLocationMiniStatus();
-    } else if (change.type === 'missing') this._showToast('Location not found');
-    else if (change.type === 'failed') this._showToast('Search failed');
+    } else if (change.type === 'missing')
+      this._showToast('Lokasi tidak ditemukan');
+    else if (change.type === 'failed') this._showToast('Pencarian gagal');
     else if (change.type === 'settled')
       this._settleLocationSearchUi(change.generation);
     else if (
@@ -117,7 +118,7 @@ export class LocationNavigation {
         }),
       onResult: (destination) => {
         if (destination.outlineUnavailable)
-          this._showToast('Detailed outline unavailable');
+          this._showToast('Garis batas terperinci tidak tersedia');
       },
       onError: (error) => console.error('[Search] Geocoding failed:', error),
     });
@@ -277,7 +278,7 @@ export class LocationNavigation {
 
   _toggleOrbit() {
     if (!this._currentTarget) {
-      this._showToast('Fly to a POI first');
+      this._showToast('Pilih titik lokasi terlebih dahulu');
       return;
     }
 

@@ -6,19 +6,19 @@ import { GUIDANCE_STATUSES } from '../loadingFeedback.js';
 import { keySetupRequirement } from '../keySetupCore.mjs';
 import { createWeatherPanel } from './weatherPanel.js';
 const FEED_STATE_LABELS = Object.freeze({
-  nominal: 'ON',
-  loading: 'LOADING',
-  degraded: 'DEGRADED',
-  stale: 'STALE',
-  partial: 'PARTIAL',
-  fallback: 'FALLBACK',
-  unavailable: 'UNAVAILABLE',
+  nominal: 'AKTIF',
+  loading: 'MEMUAT',
+  degraded: 'TERGANGGU',
+  stale: 'KEDALUWARSA',
+  partial: 'SEBAGIAN',
+  fallback: 'CADANGAN',
+  unavailable: 'TIDAK TERSEDIA',
 });
 
 // Presentation order is independent of catalog registration and startup order.
 const PANEL_GROUPS = [
   {
-    label: 'Movement',
+    label: 'Pergerakan',
     ids: [
       'satellites',
       'flights',
@@ -31,11 +31,11 @@ const PANEL_GROUPS = [
     ],
   },
   {
-    label: 'Cameras',
+    label: 'Kamera',
     ids: ['cctv', 'recent-imagery', 'street-level'],
   },
   {
-    label: 'Infrastructure',
+    label: 'Infrastruktur',
     ids: [
       'alpr-cameras',
       'military-installations',
@@ -45,11 +45,11 @@ const PANEL_GROUPS = [
     ],
   },
   {
-    label: 'Events',
+    label: 'Peristiwa',
     ids: ['rocket-launches', 'earthquakes', 'local-firms', 'fire-perimeters'],
   },
   {
-    label: 'Weather',
+    label: 'Cuaca',
     ids: [
       'wind',
       'weather-radar',
@@ -59,7 +59,7 @@ const PANEL_GROUPS = [
     ],
   },
   {
-    label: 'Utilities',
+    label: 'Utilitas',
     ids: ['directions', 'radio'],
   },
 ];
@@ -70,13 +70,33 @@ const PANEL_POSITIONS = new Map(
   PANEL_ORDER.map(({ id }, index) => [id, index]),
 );
 const PANEL_LABELS = {
-  'ais-live-vessels': 'Live Vessels',
-  bikeshare: 'Bike Share',
-  cctv: 'Cameras',
-  'street-level': 'Street Level',
-  'alpr-cameras': 'Mapped ALPR Cameras',
-  'local-datacenters': 'Data Centers',
-  'local-firms': 'Active Fires',
+  satellites: 'Satelit',
+  flights: 'Penerbangan',
+  military: 'Pesawat militer',
+  'local-adsb': 'ADS-B lokal',
+  'ais-live-vessels': 'Kapal langsung',
+  traffic: 'Lalu lintas',
+  transit: 'Angkutan umum',
+  bikeshare: 'Sepeda bersama',
+  cctv: 'Kamera',
+  'recent-imagery': 'Citra terkini',
+  'street-level': 'Tingkat jalan',
+  'alpr-cameras': 'Kamera ALPR terpetakan',
+  'military-installations': 'Instalasi militer',
+  'local-datacenters': 'Pusat data',
+  'telegeography-submarine-cables': 'Kabel bawah laut',
+  'local-dams': 'Bendungan',
+  'rocket-launches': 'Peluncuran roket',
+  earthquakes: 'Gempa bumi',
+  'local-firms': 'Kebakaran aktif',
+  'fire-perimeters': 'Batas kebakaran',
+  wind: 'Angin',
+  'weather-radar': 'Radar cuaca',
+  'weather-satellite': 'Satelit cuaca',
+  'weather-lightning': 'Petir',
+  'weather-cyclones': 'Siklon',
+  directions: 'Petunjuk arah',
+  radio: 'Radio',
 };
 
 function panelLabel(layer) {
@@ -204,7 +224,7 @@ export class LayerPanel {
     for (const layer of layers) {
       if (!layer.showInTogglePanel) continue;
       const group =
-        PANEL_ORDER[PANEL_POSITIONS.get(layer.id)]?.label ?? 'Other layers';
+        PANEL_ORDER[PANEL_POSITIONS.get(layer.id)]?.label ?? 'Lapisan lainnya';
       if (group && group !== previousGroup) {
         const heading = document.createElement('h3');
         heading.className = 'data-layer-group-heading';
@@ -526,16 +546,16 @@ export class LayerPanel {
     const lifecycleState =
       layer.lifecycleState || (layer.enabled ? 'enabled' : 'disabled');
     if (lifecycleState === 'enabling' || lifecycleState === 'disabling') {
-      return `${lifecycleState.toUpperCase()} · ${source}`;
+      return `${lifecycleState === 'enabling' ? 'MENGAKTIFKAN' : 'MENONAKTIFKAN'} · ${source}`;
     }
     if (layer.lifecycleUncertain) {
-      return `UNCERTAIN · ${source} · lifecycle state requires reconciliation`;
+      return `TIDAK PASTI · ${source} · status proses perlu disinkronkan`;
     }
     const presentedError =
       stats.error || stats.lastError || stats.managerRefreshError;
     if (presentedError) {
       if (typeof stats.retryInSec === 'number' && stats.retryInSec > 0) {
-        return `${stateLabel} · ${source} · ${presentedError} · retry ${stats.retryInSec}s`;
+        return `${stateLabel} · ${source} · ${presentedError} · coba lagi dalam ${stats.retryInSec} dtk`;
       }
       return `${stateLabel} · ${source} · ${presentedError}`;
     }
@@ -548,12 +568,14 @@ export class LayerPanel {
     ) {
       return `${source} · ${stats.statusMessage.trim()}`;
     }
-    const ago = stats.lastUpdate ? this._timeAgo(stats.lastUpdate) : 'never';
+    const ago = stats.lastUpdate
+      ? this._timeAgo(stats.lastUpdate)
+      : 'belum pernah';
     if (stats.loading) {
       const loadingLabel =
         typeof stats.loadingLabel === 'string' && stats.loadingLabel.trim()
           ? stats.loadingLabel.trim()
-          : 'loading...';
+          : 'memuat...';
       return `${source} · ${loadingLabel}`;
     }
     if (feedState === 'fallback') {
@@ -570,14 +592,14 @@ export class LayerPanel {
         Number.isInteger(rawRowCount) &&
         acceptedRowCount >= 0 &&
         rawRowCount > acceptedRowCount
-          ? `${acceptedRowCount} of ${rawRowCount} records accepted`
-          : 'incomplete snapshot';
+          ? `${acceptedRowCount} dari ${rawRowCount} catatan diterima`
+          : 'cuplikan belum lengkap';
       return `${stateLabel} · ${source} · ${detail} · ${ago}`;
     }
     if (feedState === 'stale') {
       const retry =
         typeof stats.retryInSec === 'number' && stats.retryInSec > 0
-          ? ` · retrying in ${stats.retryInSec}s`
+          ? ` · mencoba lagi dalam ${stats.retryInSec} dtk`
           : '';
       return `${stateLabel} · ${source} · ${ago}${retry}`;
     }
@@ -616,12 +638,14 @@ export class LayerPanel {
     button.setAttribute('aria-disabled', String(transitioning));
     button.setAttribute('aria-busy', String(transitioning));
     button.textContent = transitioning
-      ? layer.lifecycleState.toUpperCase()
+      ? layer.lifecycleState === 'enabling'
+        ? 'MENGAKTIFKAN'
+        : 'MENONAKTIFKAN'
       : uncertain
-        ? 'UNCERTAIN'
+        ? 'TIDAK PASTI'
         : layer.enabled
           ? FEED_STATE_LABELS[feedState]
-          : 'OFF';
+          : 'NONAKTIF';
     const keyGuidance = layerKeyRequirementTooltip(layer);
     // Name the missing key on the control itself: a row reading KEY REQUIRED
     // without saying WHICH key leaves a dead control and no next step. Empty
@@ -642,9 +666,9 @@ export class LayerPanel {
 
   _timeAgo(timestamp) {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
-    if (diff < 5) return 'just now';
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    return `${Math.floor(diff / 3600)}h ago`;
+    if (diff < 5) return 'baru saja';
+    if (diff < 60) return `${diff} dtk lalu`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} mnt lalu`;
+    return `${Math.floor(diff / 3600)} jam lalu`;
   }
 }

@@ -10,7 +10,7 @@ const signedNormalizeDeg = (deg) => ((((deg + 180) % 360) + 360) % 360) - 180;
  */
 const CCTV_CAL_FIELDS = {
   heading: {
-    label: 'HDG',
+    label: 'ARAH',
     unit: '°',
     decimals: 1,
     get: (cam) => cam.headingDeg,
@@ -19,21 +19,21 @@ const CCTV_CAL_FIELDS = {
     }),
   },
   pitch: {
-    label: 'PITCH',
+    label: 'KEMIRINGAN',
     unit: '°',
     decimals: 1,
     get: (cam) => cam.pitchDeg,
     toPatch: (value, base) => ({ pitchDeg: value - base.pitchDeg }),
   },
   fov: {
-    label: 'FOV',
+    label: 'SUDUT PANDANG',
     unit: '°',
     decimals: 0,
     get: (cam) => cam.fovDeg,
     toPatch: (value, base) => ({ fovDeg: value - base.fovDeg }),
   },
   range: {
-    label: 'RANGE',
+    label: 'JARAK',
     unit: 'm',
     decimals: 0,
     get: (cam) => cam.rangeM,
@@ -42,7 +42,7 @@ const CCTV_CAL_FIELDS = {
     }),
   },
   height: {
-    label: 'HGT',
+    label: 'TINGGI',
     unit: 'm',
     decimals: 0,
     get: (cam) => cam.mountHeightM,
@@ -81,7 +81,7 @@ export function _resetCctvCalibration() {
     },
     { origin: 'user' },
   );
-  this.actions.showToast('CCTV calibration reset');
+  this.actions.showToast('Kalibrasi CCTV diatur ulang');
 }
 
 export function _beginCctvCalValueEdit(chip) {
@@ -162,7 +162,9 @@ export function _syncCctvCalReadout(enabled, activeCamera) {
   if (this._cctvAdjustBtn) {
     const adjustOn = !!this._cctvState?.calibrationMode;
     this._cctvAdjustBtn.classList.toggle('active', adjustOn && canCalibrate);
-    this._cctvAdjustBtn.textContent = adjustOn ? 'ADJUST ON' : 'ADJUST';
+    this._cctvAdjustBtn.textContent = adjustOn
+      ? 'PENYESUAIAN AKTIF'
+      : 'SESUAIKAN';
     this._cctvAdjustBtn.disabled = !canCalibrate;
   }
   if (this._cctvCalReadout) {

@@ -30,14 +30,14 @@ export const FIRST_RUN_SESSION_KEY = 'gev:first-run-mission-session:v1';
  * Owner-selectable name for the fires/quakes mission. Flip this ONE constant to
  * re-label the tile; the alternates are pre-written so the choice is a taste
  * call at review time, not an edit.
- * @type {'ENVIRONMENTAL'|'EARTH_WATCH'|'ACTIVE_EVENTS'}
+ * @type {'LINGKUNGAN'|'PANTAU_BUMI'|'PERISTIWA_AKTIF'}
  */
-export const ENVIRONMENTAL_LABEL_CHOICE = 'ENVIRONMENTAL';
+export const ENVIRONMENTAL_LABEL_CHOICE = 'LINGKUNGAN';
 
 const ENVIRONMENTAL_LABELS = Object.freeze({
-  ENVIRONMENTAL: Object.freeze({ title: 'ENVIRONMENTAL' }),
-  EARTH_WATCH: Object.freeze({ title: 'EARTH WATCH' }),
-  ACTIVE_EVENTS: Object.freeze({ title: 'ACTIVE EVENTS' }),
+  LINGKUNGAN: Object.freeze({ title: 'LINGKUNGAN' }),
+  PANTAU_BUMI: Object.freeze({ title: 'PANTAU BUMI' }),
+  PERISTIWA_AKTIF: Object.freeze({ title: 'PERISTIWA AKTIF' }),
 });
 
 /**
@@ -45,7 +45,7 @@ const ENVIRONMENTAL_LABELS = Object.freeze({
  * @returns {{title: string}} The label set the constant above selects.
  */
 export function environmentalLabel(choice = ENVIRONMENTAL_LABEL_CHOICE) {
-  return ENVIRONMENTAL_LABELS[choice] || ENVIRONMENTAL_LABELS.ENVIRONMENTAL;
+  return ENVIRONMENTAL_LABELS[choice] || ENVIRONMENTAL_LABELS.LINGKUNGAN;
 }
 
 /*

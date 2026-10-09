@@ -29,7 +29,7 @@ const LIGHTNING_STOPS = [
   ['300+', '#00FF00'],
 ];
 const utc = (value) =>
-  value ? `${value.slice(5, 16).replace('T', ' ')} UTC` : 'Unavailable';
+  value ? `${value.slice(5, 16).replace('T', ' ')} UTC` : 'Tidak tersedia';
 
 /** A per-application observation layer, using the existing layer lifecycle and
  * row controls. History is transient: shared links always open latest imagery. */
@@ -227,12 +227,14 @@ export function createWeatherLayer({
         rendering.setHidden?.(false);
         void warmNext(time);
       }
-      error = ok ? null : 'Frame unavailable; previous observation retained';
+      error = ok
+        ? null
+        : 'Bingkai tidak tersedia; pengamatan sebelumnya dipertahankan';
       if (!ok) stop();
       return ok;
     } catch {
       if (owner === generation && !controller.signal.aborted) {
-        error = 'Weather imagery unavailable';
+        error = 'Citra cuaca tidak tersedia';
         stop();
       }
       return false;
@@ -250,12 +252,12 @@ export function createWeatherLayer({
   const layer = {
     id,
     name: radar
-      ? 'Rain radar'
+      ? 'Radar hujan'
       : lightning
-        ? 'Lightning density'
-        : 'Satellite clouds',
+        ? 'Kepadatan petir'
+        : 'Awan satelit',
     icon: radar ? '◉' : lightning ? 'ϟ' : '☁',
-    source: 'NOAA nowCOAST · OBSERVED',
+    source: 'NOAA nowCOAST · TERAMATI',
     updateInterval: lightning ? 600_000 : 120_000,
     init(nextViewer) {
       viewer = nextViewer;
@@ -338,7 +340,8 @@ export function createWeatherLayer({
         if (!enabled || controller.signal.aborted || request !== controller)
           return false;
         if (snapshot.unavailable) {
-          error = 'Weather source unavailable; previous observation retained';
+          error =
+            'Sumber cuaca tidak tersedia; pengamatan sebelumnya dipertahankan';
           stop();
           return true;
         }
@@ -368,7 +371,7 @@ export function createWeatherLayer({
         return !controller.signal.aborted && request === controller && enabled;
       } catch (cause) {
         if (controller.signal.aborted || request !== controller) return false;
-        error = cause?.message || 'Weather unavailable';
+        error = cause?.message || 'Cuaca tidak tersedia';
         stop();
         return true;
       } finally {
@@ -487,7 +490,7 @@ export function createWeatherLayer({
         noFrame &&
         shared?.mode === 'history' &&
         shared.products.find((entry) => entry.id === id)?.selected === null
-          ? `No frame within ${maxGap() / 60_000 < 60 ? `${maxGap() / 60_000} min` : `${maxGap() / 3600_000} h`} of ${utc(shared.target)}`
+          ? `Tidak ada bingkai dalam ${maxGap() / 60_000 < 60 ? `${maxGap() / 60_000} menit` : `${maxGap() / 3600_000} jam`} dari ${utc(shared.target)}`
           : null;
       const time = shownTime();
       const relation =
@@ -539,44 +542,44 @@ export function createWeatherLayer({
         readout: true,
         summary: {
           label: radar
-            ? 'Rain radar · US'
+            ? 'Radar hujan · AS'
             : lightning
-              ? 'Lightning density · 15 min'
-              : 'Satellite clouds',
+              ? 'Kepadatan petir · 15 menit'
+              : 'Awan satelit',
           coverage: radar
             ? 'CONUS'
             : lightning
-              ? 'Americas + Pacific'
+              ? 'Amerika dan Pasifik'
               : product === 'clouds'
-                ? 'Global · 60°S–60°N'
-                : 'North America',
+                ? 'Global · 60°LS–60°LU'
+                : 'Amerika Utara',
           shownTime: time,
           maxGapMinutes: maxGap() / 60_000,
           detail: time
-            ? `${followLatest ? 'Observed' : 'History'} · ${utc(time)} · ${lag}${relation}`
+            ? `${followLatest ? 'Diamati' : 'Riwayat'} · ${utc(time)} · ${lag}${relation}`
             : missing
-              ? 'Observation unavailable'
-              : 'Waiting for observation',
+              ? 'Pengamatan tidak tersedia'
+              : 'Menunggu pengamatan',
           status:
             missing ||
             hostStatus ||
             error ||
             diagnostic?.error ||
             (observationDelayed()
-              ? 'Source observations delayed'
+              ? 'Pengamatan sumber tertunda'
               : manifest?.stale
-                ? 'Stale source'
+                ? 'Sumber kedaluwarsa'
                 : loading
-                  ? 'Loading next frame…'
+                  ? 'Memuat bingkai berikutnya…'
                   : outside
-                    ? 'Map center outside coverage'
+                    ? 'Pusat peta di luar cakupan'
                     : null),
           units: radar ? 'dBZ' : lightning ? 'strikes/km²/min ×10³' : '',
         },
         chips: [
           ...(satellite
             ? [
-                ['clouds-regional', 'N. America'],
+                ['clouds-regional', 'Amerika Utara'],
                 ['clouds', 'Global'],
               ].map(([value, label]) => ({
                 id: value,
@@ -585,43 +588,44 @@ export function createWeatherLayer({
                 params: { product: value },
                 title:
                   value === 'clouds'
-                    ? 'Hourly global mosaic; usually 2–3 hours delayed'
-                    : 'GOES regional clouds; approximately 5-minute updates',
+                    ? 'Mosaik global per jam; biasanya terlambat 2–3 jam'
+                    : 'Awan regional GOES; pembaruan sekitar setiap 5 menit',
               }))
             : []),
           ...(satellite
             ? [
                 {
                   id: 'filtered',
-                  label: 'Clouds only',
+                  label: 'Awan saja',
                   active: infrared === 'filtered',
                   params: { infrared: 'filtered' },
                   title:
-                    'Dim everything but the bright, cold cloud tops; a brightness filter, not a cloud mask',
+                    'Redupkan semua kecuali puncak awan yang terang dan dingin; ini filter kecerahan, bukan masker awan',
                 },
                 {
                   id: 'full',
-                  label: 'Full',
+                  label: 'Penuh',
                   active: infrared === 'full',
                   params: { infrared: 'full' },
-                  title: 'The complete infrared image at the chosen opacity',
+                  title:
+                    'Citra inframerah lengkap dengan opasitas yang dipilih',
                 },
               ]
             : []),
           ...['light', 'strong'].map((value) => ({
             id: `opacity-${value}`,
-            label: value === 'light' ? 'Soft' : 'Vivid',
+            label: value === 'light' ? 'Lembut' : 'Cerah',
             active: opacity === value,
             params: { opacity: value },
-            title: 'Image opacity; does not alter the observed values',
+            title: 'Opasitas citra; tidak mengubah nilai pengamatan',
           })),
           {
             id: 'coverage',
             label: radar
-              ? 'View US radar'
+              ? 'Tampilkan radar AS'
               : lightning
-                ? 'View Americas & Pacific'
-                : 'View coverage',
+                ? 'Tampilkan cakupan Amerika dan Pasifik'
+                : 'Tampilkan cakupan',
             disabled: !manifest || !runNavigation,
             params: { focus: true },
           },
@@ -632,37 +636,37 @@ export function createWeatherLayer({
                 label: String(label),
                 color,
                 blurb: lightning
-                  ? `${label} strikes/km²/min ×10³ (15-minute density)`
-                  : `${label} dBZ radar reflectivity`,
+                  ? `${label} sambaran/km²/menit ×10³ (kepadatan 15 menit)`
+                  : `${label} reflektivitas radar dBZ`,
               }))
             : [],
         info: hostHidden
           ? hostStatus
-          : `${radar ? 'RADAR REFLECTIVITY · dBZ' : lightning ? 'LIGHTNING DENSITY · 15 min accumulation' : product === 'clouds' ? 'GLOBAL INFRARED · hourly' : 'GOES INFRARED · ~5 min'}\n${time ? `${followLatest ? 'Latest observation' : 'History'}: ${utc(time)}\n${lag}${current && !followLatest ? ` · frame ${index + 1}/${times.length}` : ''}${loading ? ' · loading' : ''}` : `Observation: unavailable${loading ? ' · loading' : ''}`}${missing ? `\n${missing}` : ''}${manifest?.stale ? '\nSTALE · cached source metadata' : ''}${error || diagnostic?.error ? '\n' + (error || diagnostic.error) : ''}\n${radar ? 'Contiguous US · gaps ≠ no rain' : lightning ? 'Americas + Pacific · not individual strikes\nColor: strikes/km²/min ×10³' : product === 'clouds' ? '60°S–60°N · typically 2–3 h delayed' : 'North America · infrared imagery'}${outside ? '\nMap center is outside source coverage' : ''}${motion?.matches ? (clock ? '\nReduced motion · history playback unavailable' : '\nReduced motion · manual history available') : ''}`,
+          : `${radar ? 'REFLEKTIVITAS RADAR · dBZ' : lightning ? 'KEPADATAN PETIR · akumulasi 15 menit' : product === 'clouds' ? 'INFRAMERAH GLOBAL · per jam' : 'INFRAMERAH GOES · ~5 menit'}\n${time ? `${followLatest ? 'Pengamatan terbaru' : 'Riwayat'}: ${utc(time)}\n${lag}${current && !followLatest ? ` · bingkai ${index + 1}/${times.length}` : ''}${loading ? ' · memuat' : ''}` : `Pengamatan: tidak tersedia${loading ? ' · memuat' : ''}`}${missing ? `\n${missing}` : ''}${manifest?.stale ? '\nKEDALUWARSA · metadata sumber tersimpan' : ''}${error || diagnostic?.error ? '\n' + (error || diagnostic.error) : ''}\n${radar ? 'AS berkesinambungan · area kosong ≠ tanpa hujan' : lightning ? 'Amerika dan Pasifik · bukan jumlah sambaran individual\nWarna: sambaran/km²/menit ×10³' : product === 'clouds' ? '60°LS–60°LU · biasanya terlambat 2–3 jam' : 'Amerika Utara · citra inframerah'}${outside ? '\nPusat peta berada di luar cakupan sumber' : ''}${motion?.matches ? (clock ? '\nGerakan dikurangi · pemutaran riwayat tidak tersedia' : '\nGerakan dikurangi · riwayat manual tersedia') : ''}`,
         infoTitle: lightning
-          ? 'NOAA/NWS 15-minute lightning density derived from Vaisala NLDN/GLD360. Coverage 110°E across the Pacific/Americas to 0°, 25°S–80°N. Not a live strike count, global coverage or a safety warning.'
+          ? 'Kepadatan petir 15 menit NOAA/NWS yang berasal dari Vaisala NLDN/GLD360. Cakupan 110°BT melintasi Pasifik/Amerika hingga 0°, 25°LS–80°LU. Bukan hitungan sambaran langsung, cakupan global, atau peringatan keselamatan.'
           : radar
-            ? 'NOAA MRMS radar echoes indicate precipitation patterns, not rain rate, a storm warning or a future forecast. Native source approximately 1 km; display is limited to level 6. Frames use exact advertised observation times.'
-            : 'GOES-19/18 longwave infrared Band 14 regional; NESDIS global longwave mosaic. Clouds only dims everything but bright, cold cloud tops; a brightness filter, not a cloud mask. Coverage and freshness differ by region.',
+            ? 'Gema radar NOAA MRMS menunjukkan pola presipitasi, bukan laju hujan, peringatan badai, atau prakiraan. Resolusi sumber sekitar 1 km; tampilan dibatasi hingga level 6. Bingkai menggunakan waktu pengamatan yang diumumkan.'
+            : 'Inframerah gelombang panjang Band 14 regional GOES-19/18; mosaik global gelombang panjang NESDIS. Awan hanya meredupkan area selain puncak awan yang terang dan dingin; ini filter kecerahan, bukan masker awan. Cakupan dan kebaruan berbeda menurut wilayah.',
       };
       controls.summary.settings = [
         ...(satellite
           ? [
               {
                 id: 'region',
-                label: 'REGION',
+                label: 'WILAYAH',
                 chips: controls.chips.filter(({ params }) => params.product),
               },
               {
                 id: 'image',
-                label: 'IMAGE',
+                label: 'CITRA',
                 chips: controls.chips.filter(({ params }) => params.infrared),
               },
             ]
           : []),
         {
           id: 'opacity',
-          label: 'OPACITY',
+          label: 'OPASITAS',
           chips: controls.chips.filter(({ params }) => params.opacity),
         },
       ];
@@ -677,7 +681,7 @@ export function createWeatherLayer({
     getStats() {
       return {
         count: shownTime() ? 1 : 0,
-        countLabel: isLatest() ? 'Observed' : 'History',
+        countLabel: isLatest() ? 'Diamati' : 'Riwayat',
         lastUpdate: shownTime() ? Date.parse(shownTime()) : null,
         loading,
         error: error || rendering?.getDiagnostics().error || null,

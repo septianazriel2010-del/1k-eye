@@ -294,12 +294,12 @@ test('status names the drawn road source for each mode', async () => {
   assert.equal(
     present({ liveMode: true, coveragePct: 100, roadSource: 'TomTom' })
       .loadingLabel,
-    'LIVE · Roads: TomTom · Roads without flow hidden',
+    'LANGSUNG · Jalan: TomTom · Jalan tanpa arus disembunyikan',
   );
   assert.equal(
     present({ liveMode: true, coveragePct: 0, roadSource: 'TomTom' })
       .loadingLabel,
-    'LIVE · Roads: TomTom · No flow roads in view',
+    'LANGSUNG · Jalan: TomTom · Tidak ada jalan berarus dalam tampilan',
   );
   assert.equal(
     present({
@@ -307,11 +307,11 @@ test('status names the drawn road source for each mode', async () => {
       coveragePct: 81,
       roadSource: 'TomTom + OpenStreetMap',
     }).loadingLabel,
-    'LIVE · Roads: TomTom + OpenStreetMap · Flow 81%',
+    'LANGSUNG · Jalan: TomTom + OpenStreetMap · Arus 81%',
   );
   assert.match(
     present({ liveMode: true, coveragePct: 74 }).loadingLabel,
-    /^LIVE · Roads: OpenStreetMap · Flow: TomTom · 74% cov/,
+    /^LANGSUNG · Jalan: OpenStreetMap · Arus: TomTom · Cakupan 74%/,
   );
 });
 

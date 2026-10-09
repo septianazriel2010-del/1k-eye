@@ -127,13 +127,13 @@ export function updateHud(
   }
   if (this.aircraftMeta) {
     const feedState = this.surfaceAcquiring
-      ? 'ACQUIRING SURFACE'
+      ? 'MENGAKUISISI PERMUKAAN'
       : this.surfaceFallback
-        ? 'SURFACE FALLBACK'
+        ? 'DATA PERMUKAAN CADANGAN'
         : info.stale
-          ? 'STALE FEED'
-          : 'LIVE TRACK';
-    this.aircraftMeta.textContent = `${info.layerId === 'military' ? 'MILITARY' : 'COMMERCIAL'} · ${feedState} · COURSE ALIGNED`;
+          ? 'DATA KEDALUWARSA'
+          : 'PELACAKAN LANGSUNG';
+    this.aircraftMeta.textContent = `${info.layerId === 'military' ? 'MILITER' : 'KOMERSIAL'} · ${feedState} · ARAH SELARAS`;
   }
   this.updateRoute(info);
   if (
@@ -163,8 +163,8 @@ export function updateRoute(info) {
   if (this.routeTo) this.routeTo.textContent = routeLabel(destination);
   if (this.routeStatus) {
     this.routeStatus.textContent = validDestination
-      ? 'ARROW · ESTIMATED DIRECTION'
-      : 'ROUTE DATA UNAVAILABLE';
+      ? 'PANAH · PERKIRAAN ARAH'
+      : 'DATA RUTE TIDAK TERSEDIA';
   }
   if (this.route) this.route.hidden = !origin && !destination;
   if (
@@ -198,7 +198,7 @@ export function updateRoute(info) {
     );
   }
   if (this.routeDirectionLabel) {
-    this.routeDirectionLabel.textContent = `DEST ${String(Math.round(destinationBearing)).padStart(3, '0')}°`;
+    this.routeDirectionLabel.textContent = `TUJ ${String(Math.round(destinationBearing)).padStart(3, '0')}°`;
   }
 }
 
@@ -208,10 +208,11 @@ export function syncWeatherToggle(enabled) {
   this.weatherToggle.setAttribute('aria-pressed', String(active));
   this.weatherToggle.setAttribute(
     'aria-label',
-    `${active ? 'Disable' : 'Enable'} cockpit weather effects`,
+    `${active ? 'Nonaktifkan' : 'Aktifkan'} efek cuaca kokpit`,
   );
-  this.weatherToggle.title = `${active ? 'Disable' : 'Enable'} cockpit weather effects`;
-  if (this.weatherState) this.weatherState.textContent = active ? 'ON' : 'OFF';
+  this.weatherToggle.title = `${active ? 'Nonaktifkan' : 'Aktifkan'} efek cuaca kokpit`;
+  if (this.weatherState)
+    this.weatherState.textContent = active ? 'AKTIF' : 'NONAKTIF';
 }
 
 export function setVisionMode(mode, { revealParameters = false } = {}) {
@@ -229,8 +230,8 @@ export function setVisionMode(mode, { revealParameters = false } = {}) {
   const names = {
     optical: 'Normal',
     crt: 'CRT',
-    nvg: 'Night vision',
-    thermal: 'Thermal',
+    nvg: 'Penglihatan malam',
+    thermal: 'Termal',
     anime: 'Anime',
     noir: 'Noir',
     snow: 'Snow',
@@ -239,9 +240,9 @@ export function setVisionMode(mode, { revealParameters = false } = {}) {
     this.visionCurrent.dataset.cockpitVision = next;
     this.visionCurrent.setAttribute(
       'aria-label',
-      `Current cockpit vision style: ${names[next]}. Activate for next style.`,
+      `Mode penglihatan kokpit saat ini: ${names[next]}. Aktifkan untuk mode berikutnya.`,
     );
-    this.visionCurrent.title = `Current style: ${names[next]} — click for next`;
+    this.visionCurrent.title = `Mode saat ini: ${names[next]} — klik untuk beralih`;
   }
   if (this.visionCurrentLabel)
     this.visionCurrentLabel.textContent = labels[next];

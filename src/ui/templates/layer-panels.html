@@ -4,9 +4,9 @@
     <div class="panel-glow"></div>
     <div class="data-panel-inner">
       <div class="panel-header">
-        <span class="panel-title">DATA LAYERS</span>
+        <span class="panel-title">LAPISAN DATA</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="data-panel" title="Collapse panel">+</button>
+        <button class="panel-collapse-btn" data-collapse-target="data-panel" title="Ciutkan panel">+</button>
       </div>
       <div id="data-toggles" class="data-toggle-list"></div>
     </div>
@@ -19,54 +19,54 @@
       <div class="panel-header">
         <span class="panel-title">CCTV</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="cctv-panel" title="Collapse panel">+</button>
+        <button class="panel-collapse-btn" data-collapse-target="cctv-panel" title="Ciutkan panel">+</button>
       </div>
       <div class="cyber-panel-body" data-rail-scroller>
       <div id="cctv-frame-wrap" class="cctv-frame-wrap">
-        <img id="cctv-frame" alt="CCTV feed frame" />
+        <img id="cctv-frame" alt="Bingkai siaran CCTV" />
         <canvas id="cctv-video" class="cctv-frame" hidden></canvas>
       </div>
-      <div id="cctv-source-badge" role="status" aria-live="polite">SOURCE · UNKNOWN</div>
-      <div id="cctv-meta">Enable CCTV to load camera intersections</div>
+      <div id="cctv-source-badge" role="status" aria-live="polite">SUMBER · TIDAK DIKETAHUI</div>
+      <div id="cctv-meta">Aktifkan CCTV untuk memuat persimpangan kamera</div>
       <div class="cctv-controls">
-        <button id="cctv-enable-btn" class="scene-btn">CCTV OFF</button>
-        <button id="cctv-nearest-btn" class="scene-btn">NEAREST</button>
+        <button id="cctv-enable-btn" class="scene-btn">CCTV NONAKTIF</button>
+        <button id="cctv-nearest-btn" class="scene-btn">TERDEKAT</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-prev-btn" class="scene-btn">PREV</button>
-        <select id="cctv-camera-select" aria-label="CCTV camera"></select>
-        <button id="cctv-next-btn" class="scene-btn">NEXT</button>
+        <button id="cctv-prev-btn" class="scene-btn">SEBELUMNYA</button>
+        <select id="cctv-camera-select" aria-label="Kamera CCTV"></select>
+        <button id="cctv-next-btn" class="scene-btn">BERIKUTNYA</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-focus-btn" class="scene-btn">FOCUS</button>
-        <button id="cctv-coverage-btn" class="scene-btn">COVERAGE OFF</button>
-        <button id="cctv-auto-hop-btn" class="scene-btn">AUTO HOP OFF</button>
+        <button id="cctv-focus-btn" class="scene-btn">FOKUS</button>
+        <button id="cctv-coverage-btn" class="scene-btn">CAKUPAN NONAKTIF</button>
+        <button id="cctv-auto-hop-btn" class="scene-btn">PINDAH OTOMATIS NONAKTIF</button>
       </div>
       <div class="cctv-controls">
-        <button id="cctv-projection-btn" class="scene-btn">PROJECTION ON</button>
-        <span id="cctv-quality-chip">CAL · --</span>
+        <button id="cctv-projection-btn" class="scene-btn">PROYEKSI AKTIF</button>
+        <span id="cctv-quality-chip">KAL · --</span>
       </div>
       <div class="cctv-calibration-block">
         <div class="cctv-calibration-header">
-          <div class="cctv-summary-label">CALIBRATION</div>
-          <button id="cctv-adjust-btn" class="scene-btn" title="Drag the camera in the world: rings rotate, arrows move, handles set range/FOV">ADJUST</button>
+          <div class="cctv-summary-label">KALIBRASI</div>
+          <button id="cctv-adjust-btn" class="scene-btn" title="Seret kamera di globe: cincin untuk memutar, panah untuk menggeser, gagang untuk mengatur jangkauan/FOV">SESUAIKAN</button>
         </div>
-        <div id="cctv-cal-readout" class="cctv-cal-readout" aria-label="Camera pose — click a value to type">
-          <button class="cctv-cal-value" data-cal-field="heading" title="Heading (compass °) — click to type">HDG --</button>
-          <button class="cctv-cal-value" data-cal-field="pitch" title="Pitch (° up/down) — click to type">PITCH --</button>
-          <button class="cctv-cal-value" data-cal-field="fov" title="Horizontal FOV (°) — click to type">FOV --</button>
-          <button class="cctv-cal-value" data-cal-field="range" title="Range / monitor-plane distance (m) — click to type">RANGE --</button>
-          <button class="cctv-cal-value" data-cal-field="height" title="Mount height above ground (m) — click to type">HGT --</button>
-          <button class="cctv-cal-value" data-cal-field="north" title="North offset from catalog position (m) — click to type">ΔN --</button>
-          <button class="cctv-cal-value" data-cal-field="east" title="East offset from catalog position (m) — click to type">ΔE --</button>
+        <div id="cctv-cal-readout" class="cctv-cal-readout" aria-label="Arah kamera — klik nilai untuk mengetik">
+          <button class="cctv-cal-value" data-cal-field="heading" title="Arah kompas (°) — klik untuk mengetik">ARAH --</button>
+          <button class="cctv-cal-value" data-cal-field="pitch" title="Kemiringan (° atas/bawah) — klik untuk mengetik">MIRING --</button>
+          <button class="cctv-cal-value" data-cal-field="fov" title="Bidang pandang horizontal (°) — klik untuk mengetik">FOV --</button>
+          <button class="cctv-cal-value" data-cal-field="range" title="Jangkauan / jarak bidang monitor (m) — klik untuk mengetik">JANGKAUAN --</button>
+          <button class="cctv-cal-value" data-cal-field="height" title="Tinggi pemasangan dari tanah (m) — klik untuk mengetik">TINGGI --</button>
+          <button class="cctv-cal-value" data-cal-field="north" title="Pergeseran utara dari posisi katalog (m) — klik untuk mengetik">ΔU --</button>
+          <button class="cctv-cal-value" data-cal-field="east" title="Pergeseran timur dari posisi katalog (m) — klik untuk mengetik">ΔT --</button>
         </div>
         <div class="cctv-controls cctv-calibration-actions">
-          <button id="cctv-calib-save-btn" class="scene-btn">SAVE CAL</button>
-          <button id="cctv-calib-reset-btn" class="scene-btn">RESET CAL</button>
+          <button id="cctv-calib-save-btn" class="scene-btn">SIMPAN KALIBRASI</button>
+          <button id="cctv-calib-reset-btn" class="scene-btn">ATUR ULANG KALIBRASI</button>
         </div>
       </div>
-      <div class="cctv-summary-label">SCENE SUMMARY</div>
-      <div id="cctv-summary">Enable CCTV to start camera-linked intelligence summaries.</div>
+      <div class="cctv-summary-label">RINGKASAN ADEGAN</div>
+      <div id="cctv-summary">Aktifkan CCTV untuk memulai ringkasan informasi dari kamera.</div>
       </div>
     </div>
   </div>
@@ -76,63 +76,63 @@
     <div class="panel-glow"></div>
     <div class="street-level-panel-inner" data-rail-scroller>
       <div class="panel-header">
-        <span class="panel-title">STREET LEVEL</span>
+        <span class="panel-title">TINGKAT JALAN</span>
         <span class="panel-divider"></span>
-        <button id="sl-status" class="sl-status" type="button" aria-pressed="false" title="Turn Street Level on or off">OFF</button>
-        <button class="panel-collapse-btn" data-collapse-target="street-level-panel" title="Expand panel">◀</button>
+        <button id="sl-status" class="sl-status" type="button" aria-pressed="false" title="Aktifkan atau nonaktifkan tampilan tingkat jalan">NONAKTIF</button>
+        <button class="panel-collapse-btn" data-collapse-target="street-level-panel" title="Buka panel">◀</button>
       </div>
       <div id="sl-body" class="sl-body">
         <div class="sl-main">
           <div id="sl-viewer-wrap" class="sl-viewer-wrap" hidden>
             <div class="sl-viewer-bar">
               <div class="sl-viewer-tools">
-                <button id="sl-viewer-expand" class="scene-btn" type="button" aria-pressed="false" title="Expand the street-level view (Esc shrinks it)"><span class="sl-btn-icon" aria-hidden="true">⤢</span><span class="sl-btn-text">EXPAND</span></button>
-                <div class="sl-seg" role="radiogroup" aria-label="Image fit">
-                  <button type="button" class="sl-seg-btn is-active" data-sl-render="letterbox" role="radio" aria-checked="true" title="Fit: show the whole photo, with dark bars where its shape differs from the frame">FIT</button>
-                  <button type="button" class="sl-seg-btn" data-sl-render="fill" role="radio" aria-checked="false" tabindex="-1" title="Fill: fill the frame edge to edge, cropping the photo">FILL</button>
+                <button id="sl-viewer-expand" class="scene-btn" type="button" aria-pressed="false" title="Perbesar tampilan tingkat jalan (Esc untuk mengecilkan)"><span class="sl-btn-icon" aria-hidden="true">⤢</span><span class="sl-btn-text">PERBESAR</span></button>
+                <div class="sl-seg" role="radiogroup" aria-label="Penyesuaian gambar">
+                  <button type="button" class="sl-seg-btn is-active" data-sl-render="letterbox" role="radio" aria-checked="true" title="Paskan: tampilkan seluruh foto dengan bilah gelap jika bentuknya berbeda dari bingkai">PASKAN</button>
+                  <button type="button" class="sl-seg-btn" data-sl-render="fill" role="radio" aria-checked="false" tabindex="-1" title="Penuhi: isi seluruh bingkai dengan memotong foto">PENUHI</button>
                 </div>
-                <button id="sl-follow-btn" class="scene-btn" type="button" aria-pressed="false" aria-label="Camera follows view" title="Camera follows view: move the globe camera wherever the street-level view looks"><span class="sl-btn-icon" aria-hidden="true">⌖</span><span class="sl-btn-text">FOLLOW</span></button>
+                <button id="sl-follow-btn" class="scene-btn" type="button" aria-pressed="false" aria-label="Kamera mengikuti tampilan" title="Kamera mengikuti tampilan: gerakkan kamera globe mengikuti arah tampilan tingkat jalan"><span class="sl-btn-icon" aria-hidden="true">⌖</span><span class="sl-btn-text">IKUTI</span></button>
               </div>
               <div class="sl-viewer-tools sl-viewer-tools-right">
-                <button id="sl-viewer-close" class="sl-viewer-x" type="button" title="Close the image and deselect it on the map" aria-label="Close the street-level image">×</button>
+                <button id="sl-viewer-close" class="sl-viewer-x" type="button" title="Tutup gambar dan batalkan pilihannya di peta" aria-label="Tutup gambar tingkat jalan">×</button>
               </div>
             </div>
             <div class="sl-viewer-stage">
               <div id="sl-viewer-placeholder" class="sl-viewer-placeholder" hidden></div>
-              <div id="sl-viewer" class="sl-viewer" aria-label="Street-level viewer"></div>
+              <div id="sl-viewer" class="sl-viewer" aria-label="Penampil tingkat jalan"></div>
             </div>
             <div id="sl-image-meta" class="sl-image-meta">
               <span id="sl-image-by" class="sl-image-by"></span>
               <span class="sl-image-right">
                 <span id="sl-image-when" class="sl-image-when"></span>
-                <a id="sl-image-link" class="sl-image-link" href="#" target="_blank" rel="noopener noreferrer" title="Open this image on the provider's site" hidden></a>
+                <a id="sl-image-link" class="sl-image-link" href="#" target="_blank" rel="noopener noreferrer" title="Buka gambar ini di situs penyedia" hidden></a>
               </span>
             </div>
           </div>
           <div class="sl-settings">
-            <div class="sl-providers" role="group" aria-label="Imagery providers">
-              <span class="cctv-summary-label">PROVIDERS</span>
+            <div class="sl-providers" role="group" aria-label="Penyedia citra">
+              <span class="cctv-summary-label">PENYEDIA</span>
               <div id="sl-provider-chips" class="sl-chips"></div>
             </div>
             <div id="sl-error" class="sl-error" role="alert" hidden><span aria-hidden="true">⚠</span> <span id="sl-error-text"></span></div>
             <!-- A missing key gates the filters only: the chips above stay
                  focusable so their tooltip can say how to add the key. -->
             <fieldset id="sl-controls" class="sl-controls">
-              <div class="sl-filters" role="group" aria-label="Imagery filters">
-                <span class="cctv-summary-label">IMAGERY</span>
-                <div class="sl-seg" role="radiogroup" aria-label="Panorama filter">
-                  <button type="button" class="sl-seg-btn is-active" data-sl-pano="all" role="radio" aria-checked="true">ALL</button>
+              <div class="sl-filters" role="group" aria-label="Filter citra">
+                <span class="cctv-summary-label">CITRA</span>
+                <div class="sl-seg" role="radiogroup" aria-label="Filter panorama">
+                  <button type="button" class="sl-seg-btn is-active" data-sl-pano="all" role="radio" aria-checked="true">SEMUA</button>
                   <button type="button" class="sl-seg-btn" data-sl-pano="pano" role="radio" aria-checked="false" tabindex="-1">360°</button>
-                  <button type="button" class="sl-seg-btn" data-sl-pano="flat" role="radio" aria-checked="false" tabindex="-1">FLAT</button>
+                  <button type="button" class="sl-seg-btn" data-sl-pano="flat" role="radio" aria-checked="false" tabindex="-1">DATAR</button>
                 </div>
               </div>
               <div class="sl-since">
-                <label class="cctv-summary-label" for="sl-since">SINCE</label>
-                <input id="sl-since" class="sl-range" type="range" min="0" max="8" step="1" value="0" aria-valuetext="ANY DATE" aria-describedby="sl-since-label" />
-                <output id="sl-since-label" class="sl-since-label" for="sl-since">ANY DATE</output>
+                <label class="cctv-summary-label" for="sl-since">SEJAK</label>
+                <input id="sl-since" class="sl-range" type="range" min="0" max="8" step="1" value="0" aria-valuetext="KAPAN SAJA" aria-describedby="sl-since-label" />
+                <output id="sl-since-label" class="sl-since-label" for="sl-since">KAPAN SAJA</output>
               </div>
             </fieldset>
-            <ul id="sl-legend" class="sl-legend" aria-label="Coverage colours"></ul>
+            <ul id="sl-legend" class="sl-legend" aria-label="Warna cakupan"></ul>
             <div id="sl-coverage-meta" class="sl-meta"></div>
           </div>
         </div>
@@ -145,35 +145,35 @@
     <div class="panel-glow"></div>
     <div class="scene-panel-inner">
       <div class="panel-header">
-        <span class="panel-title">SCENES</span>
+        <span class="panel-title">ADEGAN</span>
         <span class="panel-divider"></span>
-        <button class="panel-collapse-btn" data-collapse-target="scene-panel" title="Collapse panel">+</button>
+        <button class="panel-collapse-btn" data-collapse-target="scene-panel" title="Ciutkan panel">+</button>
       </div>
       <div class="scene-controls">
-        <select id="scene-select" aria-label="Scene recipe"></select>
-        <button id="scene-new-btn" class="scene-btn">NEW</button>
-        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">DEL</button>
+        <select id="scene-select" aria-label="Prasetel adegan"></select>
+        <button id="scene-new-btn" class="scene-btn">BARU</button>
+        <button id="scene-delete-btn" class="scene-btn scene-btn-danger">HAPUS</button>
       </div>
       <div class="scene-controls">
-        <button id="scene-capture-btn" class="scene-btn">CAPTURE SHOT</button>
-        <button id="scene-update-shot-btn" class="scene-btn">UPDATE SHOT</button>
+        <button id="scene-capture-btn" class="scene-btn">AMBIL GAMBAR</button>
+        <button id="scene-update-shot-btn" class="scene-btn">PERBARUI GAMBAR</button>
       </div>
       <div id="scene-shot-list" class="scene-shot-list"></div>
       <div class="scene-controls">
-        <button id="scene-start-btn" class="scene-btn">START</button>
-        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">STOP</button>
-        <button id="scene-next-btn" class="scene-btn">NEXT</button>
+        <button id="scene-start-btn" class="scene-btn">MULAI</button>
+        <button id="scene-stop-btn" class="scene-btn scene-btn-danger">BERHENTI</button>
+        <button id="scene-next-btn" class="scene-btn">BERIKUTNYA</button>
       </div>
       <div class="scene-controls">
-        <button id="scene-export-btn" class="scene-btn">EXPORT PRESETS</button>
-        <button id="scene-import-btn" class="scene-btn">IMPORT</button>
-        <button id="scene-download-btn" class="scene-btn">RUN LOG</button>
+        <button id="scene-export-btn" class="scene-btn">EKSPOR PRASETEL</button>
+        <button id="scene-import-btn" class="scene-btn">IMPOR</button>
+        <button id="scene-download-btn" class="scene-btn">UNDUH CATATAN</button>
         <input type="file" id="scene-import-file" accept="application/json,.json" hidden />
       </div>
       <div class="scene-progress">
         <div id="scene-progress-fill">0%</div>
       </div>
-      <div id="scene-status">Ready</div>
+      <div id="scene-status">Siap</div>
     </div>
   </div>
 

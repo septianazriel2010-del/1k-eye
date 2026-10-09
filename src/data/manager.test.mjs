@@ -1834,20 +1834,20 @@ test('layer feed states distinguish unavailable, fallback, stale, and degraded c
   assert.equal(layerFeedState({ count: 5, lastUpdate: 1 }), 'nominal');
 });
 
-test('layer metadata names degraded state instead of presenting an ordinary age', () => {
+test('layer metadata names degraded state in Indonesian instead of presenting an ordinary age', () => {
   const mgr = new DataLayerManager({});
   assert.match(mgr._buildMetaText({
     source: 'AISStream',
     stats: { stale: true, count: 20, lastUpdate: Date.now() - 10_000 },
-  }), /^STALE · AISStream · /);
+  }), /^KEDALUWARSA · AISStream · /);
   assert.equal(mgr._buildMetaText({
     source: 'TomTom',
     stats: { mode: 'sim', count: 120, lastUpdate: 1, loadingLabel: 'simulated traffic' },
-  }), 'FALLBACK · TomTom · simulated traffic');
+  }), 'CADANGAN · TomTom · simulated traffic');
   assert.equal(mgr._buildMetaText({
     source: 'CelesTrak',
     stats: { error: 'CelesTrak unreachable', count: 0, lastUpdate: null },
-  }), 'UNAVAILABLE · CelesTrak · CelesTrak unreachable');
+  }), 'TIDAK TERSEDIA · CelesTrak · CelesTrak unreachable');
   assert.equal(mgr._buildMetaText({
     source: 'CelesTrak',
     stats: {
@@ -1856,7 +1856,7 @@ test('layer metadata names degraded state instead of presenting an ordinary age'
       count: 50,
       lastUpdate: 1,
     },
-  }), 'UNAVAILABLE · CelesTrak · CelesTrak unreachable');
+  }), 'TIDAK TERSEDIA · CelesTrak · CelesTrak unreachable');
 });
 
 test('uncertain lifecycle state overrides ordinary feed status without disabling reconciliation', () => {
@@ -1883,15 +1883,15 @@ test('uncertain lifecycle state overrides ordinary feed status without disabling
 
   mgr._syncToggleButton(button, layer);
 
-  assert.equal(button.textContent, 'UNCERTAIN');
+  assert.equal(button.textContent, 'TIDAK PASTI');
   assert.equal(button.dataset.feedState, 'uncertain');
   assert.equal(button.disabled, false, 'the lifecycle toggle remains available to reconcile authority');
-  assert.equal(attributes.get('aria-label'), 'Radio: UNCERTAIN');
+  assert.equal(attributes.get('aria-label'), 'Radio: TIDAK PASTI');
   assert.equal(classes.get('lifecycle-uncertain'), true);
   assert.equal(classes.get('feed-nominal'), false);
   assert.equal(
     mgr._buildMetaText(layer),
-    'UNCERTAIN · Radio Browser · lifecycle state requires reconciliation',
+    'TIDAK PASTI · Radio Browser · status proses perlu disinkronkan',
   );
 });
 

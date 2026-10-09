@@ -301,9 +301,9 @@ export function bindRadioControls() {
       this._radioTunerBandPinnedForNavigation = false;
       if (result.reason === 'station-unavailable') {
         if (this._radioTunerValue)
-          this._radioTunerValue.textContent = 'OFF AIR';
+          this._radioTunerValue.textContent = 'TIDAK SIARAN';
         if (this._radioTunerStation)
-          this._radioTunerStation.textContent = 'STATION UNAVAILABLE';
+          this._radioTunerStation.textContent = 'STASIUN TIDAK TERSEDIA';
         this._radioTunerSlider?.setAttribute(
           'aria-valuetext',
           'Station unavailable after directory refresh',

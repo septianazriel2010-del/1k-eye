@@ -222,21 +222,21 @@ export function clearSelectedLayers() {
   const operation = managerOperation
     .then((result) => {
       if (result.targetIds.length === 0) {
-        this.showToast('No selected data layers');
+        this.showToast('Tidak ada lapisan data yang dipilih');
       } else if (result.notClearedIds.length > 0) {
         this.showToast(
-          `${result.notClearedIds.length} data layer${result.notClearedIds.length === 1 ? '' : 's'} could not be cleared`,
+          `${result.notClearedIds.length} lapisan data tidak dapat dihapus`,
         );
       } else {
         this.showToast(
-          `Cleared ${result.clearedIds.length} data layer${result.clearedIds.length === 1 ? '' : 's'}`,
+          `${result.clearedIds.length} lapisan data berhasil dihapus`,
         );
       }
       return result;
     })
     .catch((error) => {
       console.warn('[Data] clear selected layers failed', error);
-      this.showToast('Selected data layers could not be cleared');
+      this.showToast('Lapisan data yang dipilih tidak dapat dihapus');
       return {
         targetIds: [],
         items: [],

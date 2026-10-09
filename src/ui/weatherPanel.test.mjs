@@ -94,8 +94,8 @@ test('timeline stays visible with any observed product; native preview and trans
   assert.deepEqual(f.calls, []);
   slider.dispatchEvent(new Event('change'));
   assert.deepEqual(f.calls, [['target', ticks[0]]]);
-  f.find((n) => n.textContent === 'Latest' && n.tagName === 'BUTTON').click();
-  f.find((n) => n.textContent === 'Play').click();
+  f.find((n) => n.textContent === 'Terbaru' && n.tagName === 'BUTTON').click();
+  f.find((n) => n.textContent === 'Putar').click();
   assert.deepEqual(f.calls.slice(1), [['latest'], ['play']]);
   slider.dispatchEvent(new Event('input'));
   view.update([wind]);
@@ -397,7 +397,7 @@ test('cyclones lead, and observed history owns one bordered group with only acti
   );
   const group = f.find((n) => n.className === 'weather-observed-group');
   assert.equal(root.children[1], group);
-  assert.equal(group.children[0].textContent, 'Observed history');
+  assert.equal(group.children[0].textContent, 'Riwayat pengamatan');
   assert.equal(
     group.children[1].textContent,
     'Rain radar · Satellite clouds · Lightning density',

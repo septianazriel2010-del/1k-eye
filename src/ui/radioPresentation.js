@@ -32,11 +32,13 @@ export function renderRadioState(state) {
   this._radioLayerState?.classList.toggle('active', enabled);
   if (this._radioLayerState) {
     this._radioLayerState.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleState === 'enabling'
+        ? 'MENGAKTIFKAN'
+        : 'MENONAKTIFKAN'
       : uncertain
-        ? 'UNCERTAIN'
+        ? 'TIDAK PASTI'
         : state.loading
-          ? 'SYNC'
+          ? 'SINKRON'
           : enabled
             ? `${state.filteredCount}/${state.stationCount}`
             : 'OFF';
@@ -45,17 +47,19 @@ export function renderRadioState(state) {
     this._radioEnableBtn.classList.toggle('active', enabled);
     this._radioEnableBtn.setAttribute('aria-pressed', String(enabled));
     this._radioEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleState === 'enabling'
+        ? 'MENGAKTIFKAN'
+        : 'MENONAKTIFKAN'
       : uncertain
-        ? 'RECONCILE'
+        ? 'SINKRONKAN'
         : enabled
-          ? 'DISABLE'
-          : 'ENABLE';
+          ? 'NONAKTIFKAN'
+          : 'AKTIFKAN';
     this._radioEnableBtn.setAttribute(
       'aria-label',
       uncertain
-        ? 'Reconcile Radio — lifecycle uncertain'
-        : `${enabled ? 'Disable' : 'Enable'} Radio`,
+        ? 'Sinkronkan radio — status proses tidak pasti'
+        : `${enabled ? 'Nonaktifkan' : 'Aktifkan'} radio`,
     );
     this._radioEnableBtn.disabled = false;
     this._radioEnableBtn.setAttribute('aria-disabled', String(transitioning));
@@ -68,17 +72,19 @@ export function renderRadioState(state) {
       String(enabled),
     );
     this._contextRadioMiniEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleState === 'enabling'
+        ? 'MENGAKTIFKAN'
+        : 'MENONAKTIFKAN'
       : uncertain
-        ? 'RECONCILE'
+        ? 'SINKRONKAN'
         : enabled
-          ? 'DISABLE'
-          : 'ENABLE';
+          ? 'NONAKTIFKAN'
+          : 'AKTIFKAN';
     this._contextRadioMiniEnableBtn.setAttribute(
       'aria-label',
       uncertain
-        ? 'Reconcile Radio — lifecycle uncertain'
-        : `${enabled ? 'Disable' : 'Enable'} Radio`,
+        ? 'Sinkronkan radio — status proses tidak pasti'
+        : `${enabled ? 'Nonaktifkan' : 'Aktifkan'} radio`,
     );
     this._contextRadioMiniEnableBtn.disabled = false;
     this._contextRadioMiniEnableBtn.setAttribute(
@@ -94,17 +100,19 @@ export function renderRadioState(state) {
     this._cockpitRadioEnableBtn.classList.toggle('active', enabled);
     this._cockpitRadioEnableBtn.setAttribute('aria-pressed', String(enabled));
     this._cockpitRadioEnableBtn.textContent = transitioning
-      ? lifecycleState.toUpperCase()
+      ? lifecycleState === 'enabling'
+        ? 'MENGAKTIFKAN'
+        : 'MENONAKTIFKAN'
       : uncertain
-        ? 'RECONCILE'
+        ? 'SINKRONKAN'
         : enabled
-          ? 'DISABLE'
-          : 'ENABLE';
+          ? 'NONAKTIFKAN'
+          : 'AKTIFKAN';
     this._cockpitRadioEnableBtn.setAttribute(
       'aria-label',
       uncertain
-        ? 'Reconcile Radio — lifecycle uncertain'
-        : `${enabled ? 'Disable' : 'Enable'} Radio`,
+        ? 'Sinkronkan radio — status proses tidak pasti'
+        : `${enabled ? 'Nonaktifkan' : 'Aktifkan'} radio`,
     );
     this._cockpitRadioEnableBtn.disabled = false;
     this._cockpitRadioEnableBtn.setAttribute(
@@ -156,8 +164,8 @@ export function renderRadioState(state) {
     );
     this._radioTunerBandLabel.textContent =
       state.filter === 'all'
-        ? 'DIRECTORY BAND'
-        : `${String(activeCategory?.label || state.filter).toUpperCase()} BAND`;
+        ? 'PITA DIREKTORI'
+        : `PITA ${String(activeCategory?.label || state.filter).toUpperCase()}`;
   }
   this._radioTuner?.classList.toggle('is-static', Boolean(state.tuningStatic));
   if (tunerAvailable) this._refreshRadioTunerBand?.();
@@ -176,7 +184,7 @@ export function renderRadioState(state) {
 
   if (this._radioStationName)
     this._radioStationName.textContent =
-      selected?.name || 'NO STATION SELECTED';
+      selected?.name || 'BELUM ADA STASIUN DIPILIH';
   if (this._radioStationMeta) {
     const place = selected
       ? [selected.state, selected.countryCode].filter(Boolean).join(' · ')
@@ -188,15 +196,15 @@ export function renderRadioState(state) {
       : '';
     this._radioStationMeta.textContent = selected
       ? [place, signal].filter(Boolean).join('  /  ') ||
-        'Directory metadata only'
+        'Hanya metadata direktori'
       : state.loading
-        ? 'Loading station directory…'
-        : 'Choose a globe marker or use next.';
+        ? 'Memuat direktori stasiun…'
+        : 'Pilih penanda pada globe atau tekan berikutnya.';
   }
   if (this._radioStationTags) {
     const tags = Array.isArray(selected?.tags) ? selected.tags.slice(0, 8) : [];
     this._radioStationTags.textContent = tags.length
-      ? `TAGS · ${tags.join(' · ')}`
+      ? `TAG · ${tags.join(' · ')}`
       : '';
   }
   if (this._radioStationHomepage) {
@@ -220,30 +228,30 @@ export function renderRadioState(state) {
     this._cockpitRadioNextBtn.disabled = !interactive || !hasStations;
   if (this._radioPlayBtn) {
     const action = activePlayback
-      ? 'Pause'
+      ? 'Jeda'
       : state.audioState === 'paused'
-        ? 'Resume'
-        : 'Play';
+        ? 'Lanjutkan'
+        : 'Putar';
     this._radioPlayBtn.disabled = !interactive || !hasStations;
     this._radioPlayBtn.classList.toggle('active', activePlayback);
     this._radioPlayBtn.textContent = action.toUpperCase();
     this._radioPlayBtn.setAttribute(
       'aria-label',
-      `${action} ${selected ? 'selected' : 'nearest'} radio station`,
+      `${action} stasiun radio ${selected ? 'yang dipilih' : 'terdekat'}`,
     );
   }
   if (this._contextRadioMiniPlayBtn) {
     const action = activePlayback
-      ? 'Pause'
+      ? 'Jeda'
       : state.audioState === 'paused'
-        ? 'Resume'
-        : 'Play';
+        ? 'Lanjutkan'
+        : 'Putar';
     this._contextRadioMiniPlayBtn.disabled = !interactive || !hasStations;
     this._contextRadioMiniPlayBtn.classList.toggle('active', activePlayback);
     this._contextRadioMiniPlayBtn.textContent = activePlayback ? 'Ⅱ' : '▶';
     this._contextRadioMiniPlayBtn.setAttribute(
       'aria-label',
-      `${action} ${selected ? 'selected' : 'nearest'} radio station`,
+      `${action} stasiun radio ${selected ? 'yang dipilih' : 'terdekat'}`,
     );
     this._contextRadioMiniPlayBtn.title = action;
   }
@@ -295,56 +303,57 @@ export function renderRadioState(state) {
   }
   if (this._contextRadioMiniStation) {
     this._contextRadioMiniStation.textContent = uncertain
-      ? 'RADIO STATE UNCERTAIN'
-      : selected?.name || (state.loading ? 'SYNCING DIRECTORY' : 'RADIO READY');
+      ? 'STATUS RADIO TIDAK PASTI'
+      : selected?.name ||
+        (state.loading ? 'MENYINKRONKAN DIREKTORI' : 'RADIO SIAP');
   }
   if (this._cockpitRadioStation) {
     this._cockpitRadioStation.textContent = uncertain
-      ? 'UNCERTAIN'
-      : selected?.name || (state.loading ? 'SYNCING' : 'READY');
+      ? 'TIDAK PASTI'
+      : selected?.name || (state.loading ? 'MENYINKRONKAN' : 'SIAP');
   }
   if (this._radioPlaybackState) {
     const catalogSuffix = state.degraded
       ? state.stale
-        ? ' · stale/degraded directory'
-        : ' · degraded directory'
+        ? ' · direktori lama/terganggu'
+        : ' · direktori terganggu'
       : state.stale
-        ? ' · stale directory'
+        ? ' · direktori lama'
         : '';
     const outsideFilter =
-      selected && state.selectedIndex < 0 ? ' · outside current filter' : '';
+      selected && state.selectedIndex < 0 ? ' · di luar filter saat ini' : '';
     const messages = {
       stopped: enabled
-        ? 'Ready — playback starts only from your action'
-        : 'Radio off',
-      loading: 'Connecting directly to broadcaster…',
-      buffering: 'Buffering broadcaster stream…',
-      playing: `Playing ${selected?.name || 'station'}`,
-      paused: `Paused ${selected?.name || 'station'}`,
-      error: state.audioError || 'Broadcaster stream unavailable',
+        ? 'Siap — pemutaran hanya dimulai atas tindakan Anda'
+        : 'Radio nonaktif',
+      loading: 'Menghubungkan langsung ke penyiar…',
+      buffering: 'Memuat aliran siaran…',
+      playing: `Memutar ${selected?.name || 'stasiun'}`,
+      paused: `Dijeda ${selected?.name || 'stasiun'}`,
+      error: state.audioError || 'Aliran siaran tidak tersedia',
     };
     const voiceSuffix = state.voiceDucked
-      ? ' · muted during voice interaction'
+      ? ' · dibisukan selama interaksi suara'
       : state.voiceRestoring
-        ? ' · restoring volume after voice'
+        ? ' · memulihkan volume setelah interaksi suara'
         : '';
     const tuningSuffix = state.tuningAwaitingStationId
       ? state.audioState === 'error'
-        ? ' · static indicates no broadcaster audio'
-        : ' · tuning static until broadcaster starts'
+        ? ' · desis menandakan siaran tidak memiliki audio'
+        : ' · desis saat penalaan hingga siaran dimulai'
       : '';
     const unavailable = state.tuningUnavailableStationId
-      ? 'Station unavailable after directory refresh — choose another channel'
+      ? 'Stasiun tidak tersedia setelah direktori diperbarui — pilih kanal lain'
       : null;
     const lifecycleMessage = transitioning
       ? lifecycleState === 'enabling'
-        ? 'Radio is enabling…'
-        : 'Radio is disabling…'
+        ? 'Radio sedang diaktifkan…'
+        : 'Radio sedang dinonaktifkan…'
       : null;
     const uncertainMessage = uncertain
-      ? 'Radio lifecycle is uncertain — use Enable or Disable to reconcile'
+      ? 'Status radio tidak pasti — gunakan Aktifkan atau Nonaktifkan untuk menyinkronkan'
       : null;
-    this._radioPlaybackState.textContent = `${uncertainMessage || unavailable || lifecycleMessage || state.error || messages[state.audioState] || 'Ready'}${tuningSuffix}${voiceSuffix}${catalogSuffix}${outsideFilter}`;
+    this._radioPlaybackState.textContent = `${uncertainMessage || unavailable || lifecycleMessage || state.error || messages[state.audioState] || 'Siap'}${tuningSuffix}${voiceSuffix}${catalogSuffix}${outsideFilter}`;
     this._radioPlaybackState.classList.toggle(
       'error',
       Boolean(

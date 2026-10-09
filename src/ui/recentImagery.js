@@ -20,28 +20,30 @@ import {
 
 const PANEL_ID = 'recent-imagery-panel';
 const OVERVIEW_MIN_BOX_KM = 25;
-const ESRI_NOTE = 'Imagery on Esri · Google 3D returns when cleared';
+const ESRI_NOTE =
+  'Citra Esri aktif · Google 3D kembali setelah pilihan dihapus';
 const MODE_LABELS = [
-  ['image', 'IMAGE'],
-  ['basemap', 'VS BASEMAP'],
+  ['image', 'CITRA'],
+  ['basemap', 'VS PETA DASAR'],
   ['ab', 'A / B'],
 ];
 const START_HERE_TITLES = {
-  clear: 'Newest low-cloud day for this box · scene cloud, not box cloud',
-  cloudy: 'Newest day covering this box · cloudier than 20%',
-  partial: 'Newest day with imagery for this box · partial coverage',
-  overview: 'Newest daily overview for this box',
+  clear:
+    'Hari terbaru dengan sedikit awan untuk area ini · awan pada citra, bukan area',
+  cloudy: 'Hari terbaru yang mencakup area ini · tutupan awan lebih dari 20%',
+  partial: 'Hari terbaru dengan citra untuk area ini · cakupan sebagian',
+  overview: 'Ringkasan harian terbaru untuk area ini',
 };
 const START_HERE_REASONS = {
-  clear: 'newest clear day',
-  cloudy: 'newest day (cloudy)',
-  partial: 'newest day (partial coverage)',
-  overview: 'newest overview',
+  clear: 'hari terbaru yang cerah',
+  cloudy: 'hari terbaru (berawan)',
+  partial: 'hari terbaru (cakupan sebagian)',
+  overview: 'ringkasan terbaru',
 };
 const PLACEHOLDERS = {
-  empty: 'No imagery',
-  error: 'Unavailable',
-  present: 'Loading',
+  empty: 'Tidak ada citra',
+  error: 'Tidak tersedia',
+  present: 'Memuat',
 };
 const KEY_STEPS = {
   ArrowLeft: (index) => index - 1,
@@ -68,35 +70,36 @@ const kmText = (km) =>
       : km.toFixed(1);
 
 function cloudText(candidate) {
-  if (candidate.thumbnail?.status === 'empty') return 'no imagery';
-  if (!candidate.cloud) return 'cloud unknown';
+  if (candidate.thumbnail?.status === 'empty') return 'tanpa citra';
+  if (!candidate.cloud) return 'tutupan awan tidak diketahui';
   const min = Math.round(candidate.cloud.min);
   const max = Math.round(candidate.cloud.max);
-  return min === max ? `${min}% cloud` : `${min}–${max}% cloud`;
+  return min === max ? `${min}% awan` : `${min}–${max}% awan`;
 }
 
 function countText(snapshot) {
-  if (!snapshot.box) return 'NO BOX';
-  if (snapshot.searching) return 'SEARCHING';
+  if (!snapshot.box) return 'TANPA AREA';
+  if (snapshot.searching) return 'MENCARI';
   const count = snapshot.candidates.length;
-  return `${count} DAY${count === 1 ? '' : 'S'}`;
+  return `${count} HARI`;
 }
 
 /** The one-line hint under the strip: the next thing to do, per state. */
 function hintText(snapshot) {
-  if (snapshot.zoomToFit) return 'Zoom in or draw a smaller box';
-  if (!snapshot.box) return 'Select a box or use the view';
-  if (snapshot.searching) return 'Searching the last 30 days';
-  if (!snapshot.candidates.length) return 'No days to show for this box';
+  if (snapshot.zoomToFit) return 'Perbesar atau gambar area yang lebih kecil';
+  if (!snapshot.box) return 'Pilih area atau gunakan tampilan';
+  if (snapshot.searching) return 'Mencari dalam 30 hari terakhir';
+  if (!snapshot.candidates.length)
+    return 'Tidak ada hari untuk ditampilkan di area ini';
   const { mode, pins, shown } = snapshot;
-  if (shown.swipe !== 'none') return 'Drag the divider · SWAP trades sides';
+  if (shown.swipe !== 'none') return 'Geser pembagi · TUKAR untuk menukar sisi';
   if (mode === 'ab') {
     if (!pins.a.key && !pins.b.key)
-      return '← → preview · A or B pins the focused day';
-    return '← → preview the other side · A or B pins it';
+      return '← → pratinjau · A atau B menyematkan hari terpilih';
+    return '← → pratinjau sisi lain · A atau B menyematkannya';
   }
-  if (pins.a.key) return 'S on another day replaces it · × unpins';
-  return '← → preview · S shows the focused day';
+  if (pins.a.key) return 'S pada hari lain menggantinya · × melepas pin';
+  return '← → pratinjau · S menampilkan hari terpilih';
 }
 
 /**
@@ -173,7 +176,7 @@ export function createRecentImageryPanel({
 
   // ---- build: every block exists from the start, in its final order ----
   const root = el('section', 'recent-imagery-readout');
-  root.setAttribute('aria-label', 'Recent imagery');
+  root.setAttribute('aria-label', 'Citra terbaru');
 
   const actionsHost = el('div', 'ri-block ri-actions-row', root);
   actionsHost.id = 'ri-actions';
@@ -194,7 +197,7 @@ export function createRecentImageryPanel({
   const zoomIn = el('button', 'data-toggle-chip ri-zoom-in', notice, 'ZOOM IN');
   zoomIn.id = 'ri-zoom-in';
   zoomIn.type = 'button';
-  zoomIn.title = 'Fly in until the view fits the 1,000 km limit';
+  zoomIn.title = 'Perbesar hingga tampilan sesuai batas 1.000 km';
 
   const strip = el('div', 'ri-block ri-strip', root);
   strip.id = 'ri-strip';
@@ -213,11 +216,11 @@ export function createRecentImageryPanel({
 
   const selection = el('section', 'ri-block ri-selection', root);
   selection.id = 'ri-selection';
-  selection.setAttribute('aria-label', 'On the map');
+  selection.setAttribute('aria-label', 'Pada peta');
   const modeGroup = el('div', 'ri-mode', selection);
   modeGroup.id = 'ri-mode';
   modeGroup.setAttribute('role', 'radiogroup');
-  modeGroup.setAttribute('aria-label', 'Mode');
+  modeGroup.setAttribute('aria-label', 'Mode tampilan');
   const modeButtons = new Map(
     MODE_LABELS.map(([mode, label]) => {
       const node = el('button', 'data-toggle-chip ri-mode-btn', modeGroup);
@@ -255,13 +258,13 @@ export function createRecentImageryPanel({
     step: '1',
     value: '100',
   });
-  opacity.setAttribute('aria-label', 'Imagery opacity');
+  opacity.setAttribute('aria-label', 'Opasitas citra');
   opacityLabel.htmlFor = 'ri-opacity';
   // Its slot is always there; it is only usable while a swipe is live.
-  const swap = el('button', 'data-toggle-chip ri-swap', controls, 'SWAP');
+  const swap = el('button', 'data-toggle-chip ri-swap', controls, 'TUKAR');
   swap.id = 'ri-swap';
   swap.type = 'button';
-  swap.title = 'Trade the two sides of the divider';
+  swap.title = 'Tukar posisi kedua sisi pembagi';
   const exportHost = el('div', 'ri-exports', controls);
   const exports = createRailCardBlocks({
     container: exportHost,
@@ -318,8 +321,8 @@ export function createRecentImageryPanel({
         actions: [
           {
             id: 'select-box',
-            label: 'SELECT BOX',
-            title: 'Drag a box on the map (Esc cancels)',
+            label: 'PILIH AREA',
+            title: 'Tarik untuk memilih area pada peta (Esc membatalkan)',
             onClick: () => {
               exportError = null;
               if (tool?.isActive()) tool.cancel('toggle');
@@ -328,8 +331,8 @@ export function createRecentImageryPanel({
           },
           {
             id: 'use-view',
-            label: 'USE VIEW',
-            title: 'Use the current view as the box',
+            label: 'GUNAKAN TAMPILAN',
+            title: 'Gunakan tampilan saat ini sebagai area',
             onClick: () => {
               exportError = null;
               layer.useCurrentView(viewer);
@@ -337,8 +340,8 @@ export function createRecentImageryPanel({
           },
           {
             id: 'clear',
-            label: 'CLEAR',
-            title: 'Forget the box and its images',
+            label: 'HAPUS',
+            title: 'Hapus area dan citranya',
             disabled: !snapshot.box && !snapshot.boxError,
             onClick: () => {
               exportError = null;
@@ -388,7 +391,7 @@ export function createRecentImageryPanel({
     entry.thumb = el('div', 'ri-thumb', card);
     entry.placeholder = el('span', 'ri-thumb-text', entry.thumb);
     entry.flag = el('span', 'ri-card-flag', entry.thumb);
-    entry.start = el('span', 'ri-card-start', entry.thumb, 'START HERE');
+    entry.start = el('span', 'ri-card-start', entry.thumb, 'MULAI DI SINI');
     entry.date = el('div', 'ri-card-date', card);
     entry.sensor = el('div', 'ri-card-sensor', card);
     entry.cloud = el('div', 'ri-card-cloud', card);
@@ -432,13 +435,13 @@ export function createRecentImageryPanel({
     }
     if (entry.image) set(entry.image, 'hidden', !shown);
     set(entry.placeholder, 'hidden', shown);
-    set(entry.placeholder, 'textContent', PLACEHOLDERS[status] || 'Checking');
+    set(entry.placeholder, 'textContent', PLACEHOLDERS[status] || 'Memeriksa');
     if (entry.thumb.dataset.status !== status)
       entry.thumb.dataset.status = status;
     const flag = candidate.preview
-      ? 'PREVIEW'
+      ? 'PRATINJAU'
       : candidate.pending
-        ? 'LOADING'
+        ? 'MEMUAT'
         : '';
     set(entry.flag, 'textContent', flag);
     set(entry.flag, 'hidden', !flag);
@@ -449,7 +452,7 @@ export function createRecentImageryPanel({
         entry.start,
         'title',
         START_HERE_TITLES[snapshot.recommended.reason] ||
-          'Newest day with imagery for this box',
+          'Hari terbaru dengan citra untuk area ini',
       );
     set(entry.date, 'textContent', day);
     set(entry.sensor, 'textContent', sensorLine(candidate.product));
@@ -459,7 +462,7 @@ export function createRecentImageryPanel({
       const chip = entry.chips[slotId];
       const live = slotId === 'a' || ab;
       const on = candidate.pinned === slotId && live;
-      const label = slotId === 'a' ? (ab ? 'A' : 'SHOW') : 'B';
+      const label = slotId === 'a' ? (ab ? 'A' : 'TAMPILKAN') : 'B';
       set(chip, 'textContent', label);
       set(chip, 'disabled', empty || !live);
       toggle(chip, 'active', on);
@@ -469,22 +472,24 @@ export function createRecentImageryPanel({
       attribute(
         chip,
         'aria-label',
-        ab ? `Pin ${day} as ${slotId.toUpperCase()}` : `Show ${day}`,
+        ab
+          ? `Sematkan ${day} sebagai ${slotId.toUpperCase()}`
+          : `Tampilkan ${day}`,
       );
     }
     const state = candidate.pinned
       ? ab
-        ? ` · pinned ${candidate.pinned.toUpperCase()}`
+        ? ` · disematkan ${candidate.pinned.toUpperCase()}`
         : candidate.pinned === 'a'
-          ? ' · shown'
+          ? ' · ditampilkan'
           : ''
       : candidate.preview
-        ? ' · preview'
+        ? ' · pratinjau'
         : '';
     attribute(
       card,
       'aria-label',
-      `${day} · ${sensorLine(candidate.product)} · ${cloudText(candidate)}${recommended ? ' · start here' : ''}${state}`,
+      `${day} · ${sensorLine(candidate.product)} · ${cloudText(candidate)}${recommended ? ' · mulai di sini' : ''}${state}`,
     );
   }
 
@@ -512,14 +517,14 @@ export function createRecentImageryPanel({
       candidates.length
         ? ''
         : !snapshot.box
-          ? 'No box'
+          ? 'Belum ada area'
           : snapshot.searching
-            ? 'Searching'
+            ? 'Mencari'
             : snapshot.hiddenCount
-              ? 'Every day is empty here'
+              ? 'Tidak ada citra di setiap hari'
               : !snapshot.sources.hls && !snapshot.sources.viirs
-                ? 'Sources off'
-                : 'No imagery',
+                ? 'Sumber nonaktif'
+                : 'Tidak ada citra',
     );
     set(stripEmpty, 'hidden', candidates.length > 0);
     if (candidates[snapshot.focusIndex])
@@ -596,16 +601,16 @@ export function createRecentImageryPanel({
       set(
         tag,
         'textContent',
-        ab ? slotId.toUpperCase() : slotId === 'a' ? 'IMAGE' : 'VS',
+        ab ? slotId.toUpperCase() : slotId === 'a' ? 'CITRA' : 'VS',
       );
-      let text = 'Not set';
-      if (basemapRow) text = 'Basemap';
+      let text = 'Belum diatur';
+      if (basemapRow) text = 'Peta dasar';
       else if (image?.label)
-        text = `${image.sourceOff ? 'Source off · ' : ''}${image.label}${
+        text = `${image.sourceOff ? 'Sumber nonaktif · ' : ''}${image.label}${
           image.preview
-            ? ' · preview'
+            ? ' · pratinjau'
             : image.candidate && !image.drapable && !image.sourceOff
-              ? ' · loading'
+              ? ' · memuat'
               : ''
         }`;
       set(value, 'textContent', text);
@@ -625,7 +630,7 @@ export function createRecentImageryPanel({
       attribute(
         unpin,
         'aria-label',
-        ab ? `Unpin ${slotId.toUpperCase()}` : 'Unpin the image',
+        ab ? `Lepas pin ${slotId.toUpperCase()}` : 'Lepas pin citra',
       );
       set(unpin, 'title', unpin.getAttribute('aria-label'));
     }
@@ -658,8 +663,8 @@ export function createRecentImageryPanel({
         type: 'actions',
         actions: ['a', 'b'].map((slotId) => ({
           id: `export-${slotId}`,
-          label: ab ? `EXPORT ${slotId.toUpperCase()}` : 'EXPORT',
-          title: `Download ${ab ? slotId.toUpperCase() : 'the image'} as a PNG`,
+          label: ab ? `EKSPOR ${slotId.toUpperCase()}` : 'EKSPOR',
+          title: `Unduh ${ab ? slotId.toUpperCase() : 'citra'} sebagai PNG`,
           disabled: !exportTarget(slotId) || exporting.has(slotId),
           onClick: () => void exportImage(slotId),
         })),
@@ -682,7 +687,7 @@ export function createRecentImageryPanel({
     if (snapshot.box)
       lines.push({
         id: 'box',
-        text: `Box ${kmText(snapshot.boxSizeKm?.width)} × ${kmText(snapshot.boxSizeKm?.height)} km`,
+        text: `Area ${kmText(snapshot.boxSizeKm?.width)} × ${kmText(snapshot.boxSizeKm?.height)} km`,
       });
     if (focus) {
       lines.push({ id: 'readout', text: snapshot.readout || '' });
@@ -690,14 +695,20 @@ export function createRecentImageryPanel({
       if (focus.timeRange?.start) {
         const start = utcTime(focus.timeRange.start);
         const end = utcTime(focus.timeRange.end || focus.timeRange.start);
-        times.push(`Acquired ${start === end ? start : `${start}–${end}`}`);
+        times.push(`Diambil ${start === end ? start : `${start}–${end}`}`);
       } else if (focus.thumbnail?.acquisitionTime)
-        times.push(`Acquired ${utcTime(focus.thumbnail.acquisitionTime)}`);
-      times.push(`Coverage ${focus.coverage || 'unknown'}`);
+        times.push(`Diambil ${utcTime(focus.thumbnail.acquisitionTime)}`);
+      const coverage =
+        {
+          full: 'penuh',
+          partial: 'sebagian',
+          unknown: 'tidak diketahui',
+        }[focus.coverage] || 'tidak diketahui';
+      times.push(`Cakupan ${coverage}`);
       lines.push({ id: 'acquired', text: times.join(' · ') });
       (focus.granules || []).forEach((granule, index) => {
         const cloud = Number.isFinite(granule.cloud)
-          ? ` · ${Math.round(granule.cloud)}% cloud`
+          ? ` · ${Math.round(granule.cloud)}% awan`
           : '';
         lines.push({
           id: `granule-${index}`,
@@ -707,7 +718,7 @@ export function createRecentImageryPanel({
       });
     }
     const reason = START_HERE_REASONS[snapshot.recommended?.reason];
-    if (reason) lines.push({ id: 'start', text: `START HERE · ${reason}` });
+    if (reason) lines.push({ id: 'start', text: `MULAI DI SINI · ${reason}` });
     for (const [index, note] of snapshot.notes.entries())
       lines.push({ id: `note-${index}`, text: note, muted: true });
     if (
@@ -718,12 +729,12 @@ export function createRecentImageryPanel({
     )
       lines.push({
         id: 'overview-scale',
-        text: 'Daily overview shows little detail in a box this small',
+        text: 'Ringkasan harian menampilkan sedikit detail pada area sekecil ini',
         muted: true,
       });
     lines.push({
       id: 'credit',
-      text: 'Imagery: NASA GIBS and Worldview · HLS (Sentinel-2, Landsat 8/9) and VIIRS',
+      text: 'Citra: NASA GIBS dan Worldview · HLS (Sentinel-2, Landsat 8/9) serta VIIRS',
       muted: true,
     });
     return lines;
@@ -735,9 +746,9 @@ export function createRecentImageryPanel({
     details.update([
       {
         id: 'details',
-        title: 'Details',
+        title: 'Detail',
         open: detailsOpen,
-        compact: snapshot.focus ? snapshot.readout : 'Times, coverage, sources',
+        compact: snapshot.focus ? snapshot.readout : 'Waktu, cakupan, sumber',
         blocks: [
           { id: 'lines', type: 'lines', lines: detailLines() },
           {
@@ -747,9 +758,9 @@ export function createRecentImageryPanel({
               {
                 id: 'toggle-empty',
                 label: showing
-                  ? 'HIDE EMPTY DAYS'
-                  : `SHOW EMPTY DAYS · ${hidden}`,
-                title: 'Days the probe found empty in this box',
+                  ? 'SEMBUNYIKAN HARI KOSONG'
+                  : `TAMPILKAN HARI KOSONG · ${hidden}`,
+                title: 'Hari yang terdeteksi tanpa citra di area ini',
                 disabled: !showing && !hidden,
                 onClick: () => layer.setShowUnavailable(!showing),
               },
@@ -773,8 +784,10 @@ export function createRecentImageryPanel({
     const describe = (c) => (c ? `${sensorLine(c.product)} · ${c.day}` : '');
     // The two sides as [label, title, spoken name]; SWAP trades them.
     const sides = [
-      basemap ? ['IMAGE', describe(a), 'image'] : ['A', describe(a), 'A'],
-      basemap ? ['BASEMAP', 'The basemap', 'basemap'] : ['B', describe(b), 'B'],
+      basemap ? ['CITRA', describe(a), 'citra'] : ['A', describe(a), 'A'],
+      basemap
+        ? ['PETA DASAR', 'Peta dasar', 'peta dasar']
+        : ['B', describe(b), 'B'],
     ];
     const [before, after] = swapped ? [sides[1], sides[0]] : sides;
     const signature = live
@@ -799,10 +812,10 @@ export function createRecentImageryPanel({
       beforeTitle: before[1],
       afterTitle: after[1],
       ariaLabel: basemap
-        ? 'Recent imagery against the basemap divider'
-        : 'Recent imagery A and B divider',
+        ? 'Pembagi citra terbaru dan peta dasar'
+        : 'Pembagi citra terbaru A dan B',
       formatValueText: (leftPercent, rightPercent) =>
-        `${before[2][0].toUpperCase()}${before[2].slice(1)} ${leftPercent} percent, ${after[2]} ${rightPercent} percent`,
+        `${before[2]} ${leftPercent} persen, ${after[2]} ${rightPercent} persen`,
       getViewportWidth: () =>
         Number(viewer?.scene?.canvas?.clientWidth) ||
         Number(document.documentElement?.clientWidth) ||
@@ -894,8 +907,7 @@ export function createRecentImageryPanel({
       }
       return true;
     } catch (error) {
-      if (!destroyed)
-        exportError = `Export failed · ${error?.message || error}`;
+      if (!destroyed) exportError = `Ekspor gagal · ${error?.message || error}`;
       return false;
     } finally {
       exporting.delete(slotId);

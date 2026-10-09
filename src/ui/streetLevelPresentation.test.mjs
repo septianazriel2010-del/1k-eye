@@ -345,7 +345,7 @@ test('viewer caption reads "Image by" left, date right, and links to the provide
       },
     }),
   );
-  assert.equal(view.viewer.captionLeft, 'Image by mapfool');
+  assert.equal(view.viewer.captionLeft, 'Citra oleh mapfool');
   assert.equal(view.viewer.captionRight, '360° · 93° · 2023-10-08');
   assert.equal(
     view.viewer.link,

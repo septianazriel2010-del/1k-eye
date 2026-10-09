@@ -244,7 +244,7 @@ export function reduceTrafficSyncFeedback(
       // Neutral default: the layer always supplies its own LIVE/SIMULATED
       // label, and a fallback string must never claim a live feed on a
       // keyless build.
-      label: label || 'syncing road network',
+      label: label || 'menyinkronkan jaringan jalan',
       progressText: hasProgress ? `${progressPct}%` : '...',
     };
   }
@@ -393,9 +393,9 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'retry',
       label: (
-        camera.cameraRetry.error || 'Overpass temporarily unavailable'
+        camera.cameraRetry.error || 'Overpass untuk sementara tidak tersedia'
       ).toUpperCase(),
-      detail: `ALPR cameras · ${seconds ? `retrying in ${seconds}s` : 'retry pending'}`,
+      detail: `Kamera ALPR · ${seconds ? `mencoba lagi dalam ${seconds} dtk` : 'menunggu percobaan ulang'}`,
     };
   }
 
@@ -420,18 +420,18 @@ export function presentLoadingFeedback(state, summary, nowMs) {
   if (!state?.visible) return null;
   if (state.phase === 'terminal') {
     const labels = {
-      complete: 'LOAD COMPLETE',
-      cancelled: 'LOAD CANCELLED',
-      error: 'LOAD FAILED',
+      complete: 'PEMUATAN SELESAI',
+      cancelled: 'PEMUATAN DIBATALKAN',
+      error: 'PEMUATAN GAGAL',
     };
     const label =
       state.operation === 'disabling' && state.terminal === 'complete'
-        ? 'LIVE DATA OFF'
+        ? 'DATA LANGSUNG NONAKTIF'
         : state.terminal === 'complete' &&
             state.activeIds?.length === 1 &&
             state.activeIds[0] === 'military-installations'
-          ? 'MAPPED SITES LOADED'
-          : labels[state.terminal] || 'LOAD COMPLETE';
+          ? 'LOKASI TERPETAKAN DIMUAT'
+          : labels[state.terminal] || 'PEMUATAN SELESAI';
     return { state: state.terminal, label, detail: '' };
   }
   const active = summary.active;
@@ -439,8 +439,8 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].cameraRetry.retrying
-        ? 'RETRYING ALPR CAMERAS'
-        : 'FETCHING ALPR CAMERAS',
+        ? 'MENCOBA LAGI KAMERA ALPR'
+        : 'MEMUAT KAMERA ALPR',
       detail: 'OpenStreetMap · Overpass',
     };
   }
@@ -453,17 +453,17 @@ export function presentLoadingFeedback(state, summary, nowMs) {
     return {
       state: 'loading',
       label: active[0].installationRetry.retrying
-        ? 'RETRYING MAPPED SITES'
-        : 'FETCHING MAPPED SITES',
+        ? 'MENCOBA LAGI LOKASI TERPETAKAN'
+        : 'MEMUAT LOKASI TERPETAKAN',
       detail: 'OpenStreetMap · Overpass',
     };
   }
   const elapsed = Math.max(0, nowMs - state.startedAt);
   const label = summary.disabling
-    ? 'TURNING OFF LIVE DATA'
+    ? 'MENONAKTIFKAN DATA LANGSUNG'
     : summary.refresh
-      ? 'REFRESHING LIVE DATA'
-      : 'LOADING LIVE DATA';
+      ? 'MEMUAT ULANG DATA LANGSUNG'
+      : 'MEMUAT DATA LANGSUNG';
   const names = active
     .slice(0, 2)
     .map((record) => record.label)

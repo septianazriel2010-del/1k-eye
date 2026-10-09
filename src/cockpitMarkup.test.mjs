@@ -41,7 +41,7 @@ test('Cockpit has one reset action beside its bottom exit path', () => {
   assert.doesNotMatch(html, /id="cockpit-exit"/);
   assert.match(
     html,
-    /id="map-view-switch"[^>]*aria-label="Exit cockpit view"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?EXIT COCKPIT/,
+    /id="map-view-switch"[^>]*aria-label="Keluar dari tampilan kokpit"[^>]*aria-keyshortcuts="Escape C"[\s\S]*?close_fullscreen[\s\S]*?KELUAR DARI KOKPIT/,
   );
   const topCenterActions = html.match(/<nav id="top-center-actions"[\s\S]*?<\/nav>/);
   assert.ok(topCenterActions, 'Top-center globe actions are missing');
@@ -54,7 +54,7 @@ test('Cockpit has one reset action beside its bottom exit path', () => {
   assert.doesNotMatch(viewSwitcher[0], /id="reset-globe-view"/, 'map-only reset must stay outside Cockpit');
   assert.match(
     viewSwitcher[0],
-    /id="cockpit-reset-globe"[^>]*type="button"[^>]*aria-label="Reset cockpit to full globe view"[^>]*hidden[\s\S]*?public[\s\S]*?RESET[\s\S]*?id="map-view-switch"/,
+    /id="cockpit-reset-globe"[^>]*type="button"[^>]*aria-label="Atur ulang kokpit ke tampilan seluruh globe"[^>]*hidden[\s\S]*?public[\s\S]*?ATUR ULANG[\s\S]*?id="map-view-switch"/,
   );
 
   const actions = html.match(/<div class="global-context-actions"[\s\S]*?<\/div>/);
@@ -190,17 +190,17 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   );
   // A foreign subject dashes the nose-relative arrow/bearing only.
   assert.match(body, /readout\.aircraftRelative/);
-  assert.match(body, /'BRG —'/);
-  // A culled subject holds last-known content behind the CONTACT LOST cue.
+  assert.match(body, /'ARAH —'/);
+  // A culled subject holds last-known content behind the KONTAK HILANG cue.
   assert.match(body, /readout\.contactLost/);
-  assert.match(body, /CONTACT LOST/);
+  assert.match(body, /KONTAK HILANG/);
   assert.match(body, /this\.context\.dataset\.state = 'lost'/);
   assert.match(body, /if \(readout\.contactLost\) \{/, 'the CONTACT LOST branch is missing');
   // PREVIOUS/NEXT must be written before any early return, so the operator can
   // always step off the current contact — including a lost one.
   const navIndex = body.indexOf('this.contextNext.disabled');
   const lostIndex = body.indexOf('if (readout.contactLost)');
-  assert.ok(navIndex >= 0 && lostIndex > navIndex, 'nav state must be written before the CONTACT LOST return');
+  assert.ok(navIndex >= 0 && lostIndex > navIndex, 'nav state must be written before the KONTAK HILANG return');
   assert.equal(
     (body.match(/this\.contextNext\.disabled/g) || []).length,
     1,
@@ -209,7 +209,7 @@ test('the Contact panel never hides itself out from under its own NEXT button', 
   assert.match(
     css,
     /\.cockpit-context-window\[data-state='lost'\]/,
-    'CONTACT LOST reuses the panel-level data-state cue that "uncertain" already uses',
+    'KONTAK HILANG reuses the panel-level data-state cue that "uncertain" already uses',
   );
 });
 
@@ -261,8 +261,8 @@ test('Cockpit owns a focused shared Display portal and compact Radio controls', 
   assert.match(html, /data-cockpit-display-slot="hud"/);
   assert.match(html, /data-cockpit-display-slot="detection"[\s\S]*?data-cockpit-display-slot="parameters"[\s\S]*?data-cockpit-display-slot="models3d"/);
   assert.doesNotMatch(html, /data-cockpit-display-slot="presets"/);
-  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="Clear selected data layers"/);
-  assert.match(html, /id="reset-globe-view"[^>]*aria-label="Reset to full globe view"/);
+  assert.match(html, /id="clear-selected-layers"[^>]*aria-label="Hapus pilihan lapisan data"/);
+  assert.match(html, /id="reset-globe-view"[^>]*aria-label="Kembali ke tampilan seluruh globe"/);
   assert.match(css, /#top-center-actions\s*\{[\s\S]*?left:\s*50%;[\s\S]*?display:\s*flex;[\s\S]*?transform:\s*translateX\(-50%\)/);
   assert.match(
     css,
@@ -761,9 +761,9 @@ test('cockpit weather control is off before JavaScript restores an explicit opt-
     /<button\s+id="cockpit-weather-toggle"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit weather toggle markup is missing');
-  assert.match(match[0], /aria-label="Enable cockpit weather effects"/);
+  assert.match(match[0], /aria-label="Aktifkan efek cuaca kokpit"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], /id="cockpit-weather-state">OFF</);
+  assert.match(match[0], /id="cockpit-weather-state">NONAKTIF</);
 });
 
 test('cockpit summary presents the focused item as Contact', () => {
@@ -771,14 +771,14 @@ test('cockpit summary presents the focused item as Contact', () => {
     /<aside id="cockpit-context"[\s\S]*?<\/aside>/,
   );
   assert.ok(match, 'cockpit Contact summary is missing');
-  assert.match(match[0], /aria-label="Contact cockpit summary"/);
-  assert.match(match[0], /class="cockpit-context-kicker">CONTACT</);
-  assert.match(match[0], /aria-label="Contact navigation"/);
-  assert.match(match[0], /aria-label="Previous — prior visited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Next — nearest unvisited contact in the 250 km window"/);
-  assert.match(match[0], /aria-label="Collapse Contact panel"/);
+  assert.match(match[0], /aria-label="Ringkasan kontak kokpit"/);
+  assert.match(match[0], /class="cockpit-context-kicker">KONTAK</);
+  assert.match(match[0], /aria-label="Navigasi kontak"/);
+  assert.match(match[0], /aria-label="Sebelumnya — kontak yang telah dikunjungi dalam radius 250 km"/);
+  assert.match(match[0], /aria-label="Berikutnya — kontak terdekat yang belum dikunjungi dalam radius 250 km"/);
+  assert.match(match[0], /aria-label="Ciutkan panel kontak"/);
   assert.doesNotMatch(match[0], />GLOBAL CONTEXT</);
-  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? 'Collapse' : 'Expand'\} Contact panel`/);
+  assert.match(setContextCollapsed.toString(), /`\$\{expanded \? 'Ciutkan' : 'Buka'\} panel kontak`/);
 });
 
 test('Cockpit Contact navigation omits the redundant Focus camera action', () => {
@@ -793,10 +793,10 @@ test('Global Context names its mixed contact cycle without changing the stable m
     /<button id="global-context-flights-btn"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'Global Context contacts button is missing');
-  assert.match(match[0], />CONTACTS</);
-  assert.match(match[0], /aria-label="CONTACTS"/);
-  assert.match(match[0], /title="Cycles the nearest contacts of whatever type you select — planes, vessels, installations\. Satellites track independently\."/);
-  assert.doesNotMatch(match[0], />FLIGHTS</);
+  assert.match(match[0], />KONTAK</);
+  assert.match(match[0], /aria-label="KONTAK"/);
+  assert.match(match[0], /title="Telusuri kontak terdekat sesuai jenis yang dipilih — pesawat, kapal, atau instalasi\. Satelit dilacak secara terpisah\."/);
+  assert.doesNotMatch(match[0], />PENERBANGAN</);
 });
 
 test('Global Context uses its dedicated right rail without a duplicate Data Layers row', () => {
@@ -814,8 +814,8 @@ test('Global Context standby describes both chooser modes', () => {
     /<div id="context-mode-standby"[\s\S]*?<\/div>/,
   );
   assert.ok(match, 'Global Context standby is missing');
-  assert.match(match[0], /CONTACTS — nearest planes · vessels · sites/);
-  assert.match(match[0], /SPACE MISSIONS — launches &amp; orbital assets/);
+  assert.match(match[0], /KONTAK — pesawat · kapal · lokasi terdekat/);
+  assert.match(match[0], /MISI ANTARIKSA — peluncuran &amp; objek orbit/);
 });
 
 test('cockpit briefing cycle control keeps its state as the accessible name', () => {
@@ -823,14 +823,14 @@ test('cockpit briefing cycle control keeps its state as the accessible name', ()
     /<button\s+id="cockpit-brief-auto"[\s\S]*?<\/button>/,
   );
   assert.ok(match, 'cockpit briefing cycle toggle is missing');
-  assert.match(match[0], /aria-label="CYCLE OFF"/);
+  assert.match(match[0], /aria-label="PERGANTIAN NONAKTIF"/);
   assert.match(match[0], /aria-pressed="false"/);
-  assert.match(match[0], />CYCLE OFF<\/button>/);
-  assert.match(match[0], /title="Cycle briefing pages automatically every 9 seconds \(Signals → News → Local\)\./);
+  assert.match(match[0], />PERGANTIAN NONAKTIF<\/button>/);
+  assert.match(match[0], /title="Ganti halaman ringkasan otomatis setiap 9 detik \(Sinyal → Berita → Lokal\)\./);
 
   const update = setBriefAutoRotate.toString();
   assert.ok(update, 'cockpit briefing cycle state updater is missing');
-  assert.match(update, /const label = this\.briefAutoRotateEnabled \? 'CYCLE ON' : 'CYCLE OFF';/);
+  assert.match(update, /const label = this\.briefAutoRotateEnabled\s+\?\s+'PERGANTIAN AKTIF'\s+:\s+'PERGANTIAN NONAKTIF';/);
   assert.match(update, /setAttribute\('aria-label', label\)/);
   assert.match(update, /\.title = help;/);
   assert.doesNotMatch(update, /setAttribute\('aria-label', help\)/);

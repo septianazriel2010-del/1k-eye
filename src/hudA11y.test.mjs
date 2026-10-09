@@ -10,10 +10,10 @@ const parameters = readFileSync(new URL('./ui/styleParameters.js', import.meta.u
 // Native labels and hidden inputs must not be treated as missing aria-labels.
 test('HUD sliders and location search have descriptive explicit names', () => {
   for (const [id, name] of [
-    ['scope-feather-slider', 'Scope edge feather'],
+    ['scope-feather-slider', 'Kelembutan tepi teropong'],
     ['bloom-intensity-slider', 'Bloom intensity'],
-    ['sharpen-intensity-slider', 'Sharpen intensity'],
-    ['location-search', 'Search location by name or coordinates'],
+    ['sharpen-intensity-slider', 'Intensitas ketajaman'],
+    ['location-search', 'Cari lokasi berdasarkan nama atau koordinat'],
   ]) {
     const input = html.match(new RegExp(`<input\\b[^>]*\\bid="${id}"[^>]*>`))?.[0];
     assert.ok(input, `${id} exists`);
@@ -22,7 +22,7 @@ test('HUD sliders and location search have descriptive explicit names', () => {
 });
 
 test('the first-run checkbox keeps its native visible label', () => {
-  assert.match(html, /<label\b[^>]*class="first-run-suppress"[^>]*>\s*<input type="checkbox" data-first-run-suppress \/>\s*<span>Don't show this again<\/span>\s*<\/label>/);
+  assert.match(html, /<label\b[^>]*class="first-run-suppress"[^>]*>\s*<input type="checkbox" data-first-run-suppress \/>\s*<span>Jangan tampilkan lagi<\/span>\s*<\/label>/);
 });
 
 test('generated style sliders use the visible parameter label as their name', () => {

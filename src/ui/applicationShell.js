@@ -1029,7 +1029,7 @@ export class StyleManager extends ShellFacade {
     const { cctvLayer } = this.services;
     if (this._disposed) return false;
     if (!this._dataManager || !this._dataManager.layers?.has('cctv')) {
-      this._showToast('CCTV layer unavailable');
+      this._showToast('Lapisan CCTV tidak tersedia');
       return false;
     }
     const enabled = this._dataManager.isEnabled('cctv');
@@ -1478,7 +1478,9 @@ export class StyleManager extends ShellFacade {
     this._lifetime.listen(this._shareBtn, 'click', async () => {
       const success = await this.shareLinkManager.copyLink();
       if (!this._disposed)
-        this._showToast(success ? 'Link copied!' : 'Copy failed');
+        this._showToast(
+          success ? 'Tautan berhasil disalin!' : 'Gagal menyalin tautan',
+        );
     });
   }
 

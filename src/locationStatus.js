@@ -1,5 +1,5 @@
 /**
- * Copy for the collapsed LOCATION panel's two-line mini-status.
+ * Copy for the collapsed LOKASI panel's two-line mini-status.
  *
  * Two navigation paths reach it and both must land somewhere real:
  *  - a preset city/POI pill, which carries a curated `{name, pois}` record;
@@ -10,7 +10,7 @@
  * readout reporting "Location: --" while the camera sat over the destination.
  */
 
-const EMPTY = Object.freeze({ city: '📍 Location: --', poi: 'Landmark: --' });
+const EMPTY = Object.freeze({ city: '📍 Lokasi: --', poi: 'Tengara: --' });
 
 /** Split a geocoder `formatted_address` into its trimmed, non-empty segments. */
 export function addressSegments(label) {
@@ -58,7 +58,7 @@ export function locationMiniStatus({
       poi:
         segments.length > 1
           ? segments.slice(1).join(', ')
-          : 'Searched location',
+          : 'Lokasi yang dicari',
     };
   }
 

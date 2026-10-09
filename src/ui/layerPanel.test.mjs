@@ -16,7 +16,7 @@ test('panel presentation places Transit between Street Traffic and Bike Share in
     runInNewContext(`${declarations}\nJSON.stringify(PANEL_ORDER)`),
   );
   assert.deepEqual(
-    order.filter(({ label }) => label === 'Movement').map(({ id }) => id),
+    order.filter(({ label }) => label === 'Pergerakan').map(({ id }) => id),
     [
       'satellites',
       'flights',
@@ -56,21 +56,21 @@ test('partial feed controls distinguish incomplete records from stale data and o
   };
   const panel = LayerPanel.prototype;
   panel._syncToggleButton(button, layer);
-  assert.equal(button.textContent, 'PARTIAL');
+  assert.equal(button.textContent, 'SEBAGIAN');
   assert.equal(button.dataset.feedState, 'partial');
   assert.equal(classes.get('feed-partial'), true);
   assert.equal(classes.get('feed-stale'), false);
-  assert.match(attrs.get('aria-label'), /PARTIAL/);
+  assert.match(attrs.get('aria-label'), /SEBAGIAN/);
   assert.match(
     panel._buildMetaText(layer),
-    /^PARTIAL · AISStream · 2 of 3 records accepted · /,
+    /^SEBAGIAN · AISStream · 2 dari 3 catatan diterima · /,
   );
   assert.match(
     panel._buildMetaText({
       ...layer,
       stats: { ...layer.stats, rawRowCount: 2 },
     }),
-    /incomplete snapshot/,
+    /cuplikan belum lengkap/,
   );
   assert.equal(layerFeedState({ ...layer.stats, stale: true }), 'stale');
   assert.equal(
@@ -84,11 +84,11 @@ test('partial feed controls distinguish incomplete records from stale data and o
   assert.equal(layerFeedState({ ...layer.stats, loading: true }), 'loading');
   layer.stats = { ...layer.stats, partial: false };
   panel._syncToggleButton(button, layer);
-  assert.equal(button.textContent, 'ON');
+  assert.equal(button.textContent, 'AKTIF');
   assert.equal(classes.get('feed-partial'), false);
   layer.enabled = false;
   panel._syncToggleButton(button, layer);
-  assert.equal(button.textContent, 'OFF');
+  assert.equal(button.textContent, 'NONAKTIF');
 });
 
 test('readout rows contain only toggles and metadata; ordinary rows retain controls', async () => {

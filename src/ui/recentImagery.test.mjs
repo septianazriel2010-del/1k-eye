@@ -366,7 +366,7 @@ test('the readout mounts in the rail body, hides while the layer is off and open
   assert.equal(panel.hidden, false);
   assert.equal(f.collapse.clicked, 1, 'first appearance expands');
   assert.equal(panel.classList.contains('collapsed'), false);
-  assert.equal(f.count.textContent, '4 DAYS');
+  assert.equal(f.count.textContent, '4 HARI');
   f.collapse.click();
   f.layer.disable();
   f.layer.enable();
@@ -647,18 +647,21 @@ test('cards carry thumbnail, date, sensor, cloud, START HERE and PREVIEW; the ch
   const s18 = f.card(S18);
   assert.equal(f.part(s18, 'ri-card-date').textContent, 'Sep 18');
   assert.equal(f.part(s18, 'ri-card-sensor').textContent, 'Sentinel-2 · 30 m');
-  assert.equal(f.part(s18, 'ri-card-cloud').textContent, '12% cloud');
+  assert.equal(f.part(s18, 'ri-card-cloud').textContent, '12% awan');
   assert.equal(f.part(s18, 'ri-card-start').hidden, false);
-  assert.match(f.part(s18, 'ri-card-start').title, /Newest low-cloud day/);
-  assert.equal(f.part(s18, 'ri-card-flag').textContent, 'PREVIEW');
+  assert.match(
+    f.part(s18, 'ri-card-start').title,
+    /Hari terbaru dengan sedikit awan/,
+  );
+  assert.equal(f.part(s18, 'ri-card-flag').textContent, 'PRATINJAU');
   assert.equal(
     f.part(f.card(V21), 'ri-card-cloud').textContent,
-    'cloud unknown',
+    'tutupan awan tidak diketahui',
   );
-  assert.equal(f.part(f.card(V21), 'ri-thumb-text').textContent, 'Checking');
+  assert.equal(f.part(f.card(V21), 'ri-thumb-text').textContent, 'Memeriksa');
   assert.equal(
     f.part(f.card(V21), 'ri-card-sensor').textContent,
-    'Daily overview · 250 m',
+    'Ringkasan harian · 250 m',
   );
   assert.equal(
     f.part(f.card(L16), 'ri-card-sensor').textContent,
@@ -673,9 +676,9 @@ test('cards carry thumbnail, date, sensor, cloud, START HERE and PREVIEW; the ch
       b.classList.contains('is-reserved'),
       b.disabled,
     ],
-    ['SHOW', 'false', true, true],
+    ['TAMPILKAN', 'false', true, true],
   );
-  assert.equal(a.getAttribute('aria-label'), 'Show Sep 18');
+  assert.equal(a.getAttribute('aria-label'), 'Tampilkan Sep 18');
   a.click();
   assert.equal(a.getAttribute('aria-pressed'), 'true');
   assert.equal(a.classList.contains('active'), true);
@@ -684,7 +687,7 @@ test('cards carry thumbnail, date, sensor, cloud, START HERE and PREVIEW; the ch
     true,
     'pinned, not previewed',
   );
-  assert.match(s18.getAttribute('aria-label'), /· shown$/);
+  assert.match(s18.getAttribute('aria-label'), /· ditampilkan$/);
   // A / B: the same chip slots, relabelled.
   f.root
     .find(
@@ -702,7 +705,7 @@ test('cards carry thumbnail, date, sensor, cloud, START HERE and PREVIEW; the ch
     ['A', 'B', false, false],
   );
   assert.equal(a.parentNode.children.indexOf(a), 0);
-  assert.equal(b.getAttribute('aria-label'), 'Pin Sep 18 as B');
+  assert.equal(b.getAttribute('aria-label'), 'Sematkan Sep 18 sebagai B');
   // A day is one slot only: B moves it.
   b.click();
   assert.deepEqual(
@@ -713,7 +716,7 @@ test('cards carry thumbnail, date, sensor, cloud, START HERE and PREVIEW; the ch
   f.thumbnails.probe(V21, 'empty');
   f.layer.setShowUnavailable(true);
   assert.equal(f.chip(V21, 'a').disabled, true);
-  assert.equal(f.part(f.card(V21), 'ri-card-cloud').textContent, 'no imagery');
+  assert.equal(f.part(f.card(V21), 'ri-card-cloud').textContent, 'tanpa citra');
 });
 
 test('the selection bar reads the mode, both rows and a preview, with × reserved when empty', async () => {
@@ -729,14 +732,17 @@ test('the selection bar reads the mode, both rows and a preview, with × reserve
       node.getAttribute('aria-checked'),
     ]),
     [
-      ['IMAGE', 'radio', 'true'],
-      ['VS BASEMAP', 'radio', 'false'],
+      ['CITRA', 'radio', 'true'],
+      ['VS PETA DASAR', 'radio', 'false'],
       ['A / B', 'radio', 'false'],
     ],
   );
-  assert.equal(rowText(f, 'a'), 'IMAGE | Sep 18 · Sentinel-2 · 30 m · preview');
+  assert.equal(
+    rowText(f, 'a'),
+    'CITRA | Sep 18 · Sentinel-2 · 30 m · pratinjau',
+  );
   assert.equal(f.byId('ri-slot-a').dataset.state, 'preview');
-  assert.equal(rowText(f, 'b'), 'VS | Basemap');
+  assert.equal(rowText(f, 'b'), 'VS | Peta dasar');
   assert.equal(f.byId('ri-slot-b').classList.contains('lit'), false, 'dimmed');
   const unpinA = f.byId('ri-unpin-a');
   assert.deepEqual(
@@ -748,17 +754,17 @@ test('the selection bar reads the mode, both rows and a preview, with × reserve
     [true, true, '×'],
   );
   f.key('s');
-  assert.equal(rowText(f, 'a'), 'IMAGE | Sep 18 · Sentinel-2 · 30 m');
+  assert.equal(rowText(f, 'a'), 'CITRA | Sep 18 · Sentinel-2 · 30 m');
   assert.equal(f.byId('ri-slot-a').dataset.state, 'pinned');
   assert.equal(unpinA.disabled, false);
-  assert.equal(unpinA.getAttribute('aria-label'), 'Unpin the image');
+  assert.equal(unpinA.getAttribute('aria-label'), 'Lepas pin citra');
   modes[1].click();
   assert.equal(f.snap().mode, 'basemap');
   assert.equal(modes[1].getAttribute('aria-checked'), 'true');
   assert.equal(f.byId('ri-slot-b').classList.contains('lit'), true, 'lit');
   modes[2].click();
   assert.equal(rowText(f, 'a'), 'A | Sep 18 · Sentinel-2 · 30 m');
-  assert.equal(rowText(f, 'b'), 'B | Not set');
+  assert.equal(rowText(f, 'b'), 'B | Belum diatur');
   assert.equal(f.byId('ri-slot-b').dataset.state, 'empty');
   assert.equal(f.byId('ri-unpin-b').classList.contains('is-reserved'), true);
   f.chip(L16, 'b').click();
@@ -864,38 +870,50 @@ test('the notice line shows the refusal, then errors, then CLEAR, then the Esri 
   const hint = f.byId('ri-hint');
   f.layer.enable();
   assert.equal(noticeText.textContent, '');
-  assert.equal(hint.textContent, 'Select a box or use the view');
+  assert.equal(hint.textContent, 'Pilih area atau gunakan tampilan');
   f.layer.setBox(BOX);
-  assert.equal(hint.textContent, 'Searching the last 30 days');
+  assert.equal(hint.textContent, 'Mencari dalam 30 hari terakhir');
   f.catalog.resolveLast();
   await settle();
-  assert.equal(hint.textContent, '← → preview · S shows the focused day');
+  assert.equal(hint.textContent, '← → pratinjau · S menampilkan hari terpilih');
   active = 'esri-imagery';
   controller.lease.settle({ status: 'ready', activeId: active });
   await settle();
   assert.equal(
     noticeText.textContent,
-    'Imagery on Esri · Google 3D returns when cleared',
+    'Citra Esri aktif · Google 3D kembali setelah pilihan dihapus',
   );
   assert.equal(notice.classList.contains('info'), true);
   f.layer.setBox({ west: 0, south: 0, east: 20, north: 20 });
-  assert.equal(noticeText.textContent, 'Box is 2,226 km wide · limit 1,000 km');
+  assert.equal(
+    noticeText.textContent,
+    'Area selebar 2,226 km · batas 1,000 km',
+  );
   assert.equal(notice.classList.contains('warn'), true);
-  assert.equal(hint.textContent, 'Zoom in or draw a smaller box');
+  assert.equal(hint.textContent, 'Perbesar atau gambar area yang lebih kecil');
   f.layer.setBox(BOX);
   f.chip(S18, 'a').click();
-  assert.equal(hint.textContent, 'S on another day replaces it · × unpins');
+  assert.equal(
+    hint.textContent,
+    'S pada hari lain menggantinya · × melepas pin',
+  );
   f.layer.setMode('basemap');
-  assert.equal(hint.textContent, 'Drag the divider · SWAP trades sides');
+  assert.equal(hint.textContent, 'Geser pembagi · TUKAR untuk menukar sisi');
   f.layer.setMode('ab');
-  assert.equal(hint.textContent, '← → preview the other side · A or B pins it');
+  assert.equal(
+    hint.textContent,
+    '← → pratinjau sisi lain · A atau B menyematkannya',
+  );
   f.chip(L16, 'b').click();
-  assert.equal(hint.textContent, 'Drag the divider · SWAP trades sides');
+  assert.equal(hint.textContent, 'Geser pembagi · TUKAR untuk menukar sisi');
   f.layer.setAssignment('b', null);
   f.layer.setAssignment('a', null);
-  assert.equal(hint.textContent, '← → preview · A or B pins the focused day');
+  assert.equal(
+    hint.textContent,
+    '← → pratinjau · A atau B menyematkan hari terpilih',
+  );
   f.byAction('clear').click();
-  assert.equal(noticeText.textContent, 'Box and images cleared');
+  assert.equal(noticeText.textContent, 'Area dan citra dihapus');
   assert.equal(notice.classList.contains('info'), true);
 });
 
@@ -929,10 +947,13 @@ test('an oversized box offers ZOOM IN in a fixed slot at the end of the notice l
   assert.deepEqual(reserved(), [false, false, 'false', true]);
   assert.equal(
     f.byId('ri-notice-text').textContent,
-    'Box is 2,226 km wide · limit 1,000 km',
+    'Area selebar 2,226 km · batas 1,000 km',
   );
-  assert.equal(f.byId('ri-hint').textContent, 'Zoom in or draw a smaller box');
-  assert.equal(zoom.title, 'Fly in until the view fits the 1,000 km limit');
+  assert.equal(
+    f.byId('ri-hint').textContent,
+    'Perbesar atau gambar area yang lebih kecil',
+  );
+  assert.equal(zoom.title, 'Perbesar hingga tampilan sesuai batas 1.000 km');
   zoom.click();
   assert.equal(flights.length, 1);
   assert.ok(
@@ -966,7 +987,7 @@ test('the divider exists only while a swipe is live, labelled A / B or IMAGE / B
     return [owned.a?.splitDirection, owned.b?.splitDirection];
   };
   assert.equal(swap.tagName, 'BUTTON');
-  assert.equal(swap.textContent, 'SWAP');
+  assert.equal(swap.textContent, 'TUKAR');
   assert.equal(swap.parentNode, f.byId('ri-controls'));
   await f.ready();
   await f.settleLease();
@@ -976,18 +997,18 @@ test('the divider exists only while a swipe is live, labelled A / B or IMAGE / B
   assert.equal(f.snap().swapped, false, 'no swipe, nothing to swap');
   f.layer.setMode('basemap');
   assert.equal(f.splits.length, 1);
-  assert.deepEqual(labels(), ['IMAGE', 'BASEMAP']);
+  assert.deepEqual(labels(), ['CITRA', 'PETA DASAR']);
   assert.equal(f.splits[0].options.id, 'recent-imagery-split-line');
   assert.deepEqual(swapState(), [false, false, 'false', 'false']);
   assert.deepEqual(directions(), ['left', undefined]);
   // VS BASEMAP: SWAP puts the image right of the basemap, and back.
   swap.click();
   assert.equal(f.snap().swapped, true);
-  assert.deepEqual(labels(), ['BASEMAP', 'IMAGE']);
+  assert.deepEqual(labels(), ['PETA DASAR', 'CITRA']);
   assert.deepEqual(directions(), ['right', undefined]);
   assert.deepEqual(swapState(), [false, false, 'false', 'true']);
   swap.click();
-  assert.deepEqual(labels(), ['IMAGE', 'BASEMAP']);
+  assert.deepEqual(labels(), ['CITRA', 'PETA DASAR']);
   assert.deepEqual(directions(), ['left', undefined]);
   f.layer.setMode('ab');
   f.layer.setAssignment('a', S18);
@@ -1044,7 +1065,7 @@ test('opacity drives both images; EXPORT downloads the pin or the preview and EX
       exportB.classList.contains('is-reserved'),
       exportB.disabled,
     ],
-    ['EXPORT', false, true, true],
+    ['EKSPOR', false, true, true],
   );
   f.byId('ri-opacity').value = '40';
   f.byId('ri-opacity').dispatch('input');
@@ -1074,7 +1095,7 @@ test('opacity drives both images; EXPORT downloads the pin or the preview and EX
       exportB.textContent,
       exportB.classList.contains('is-reserved'),
     ],
-    ['EXPORT A', 'EXPORT B', false],
+    ['EKSPOR A', 'EKSPOR B', false],
   );
   const failing = fixture({
     fetchImpl: async () => response({ ok: false, status: 503 }),
@@ -1083,7 +1104,7 @@ test('opacity drives both images; EXPORT downloads the pin or the preview and EX
   assert.equal(await failing.readout.exportImage('a'), false);
   assert.equal(
     failing.byId('ri-notice-text').textContent,
-    'Export failed · HTTP 503',
+    'Ekspor gagal · HTTP 503',
   );
 });
 
@@ -1099,24 +1120,27 @@ test('DETAILS is a collapsed rail card holding every note, and the empty-days to
   header.click();
   assert.equal(article.dataset.open, 'true');
   const text = f.byId('ri-details').textContent;
-  assert.match(text, /Box \d+\.\d × \d+\.\d km/);
+  assert.match(text, /Area \d+\.\d × \d+\.\d km/);
   assert.match(text, /Sep 18, 2026 17:12Z/);
-  assert.match(text, /Acquired 17:12Z–17:14Z · Coverage full/);
-  assert.match(text, /S30-2026-09-18 · 17:12Z · 12% cloud/);
-  assert.match(text, /START HERE · newest clear day/);
+  assert.match(text, /Diambil 17:12Z–17:14Z · Cakupan penuh/);
+  assert.match(text, /S30-2026-09-18 · 17:12Z · 12% awan/);
+  assert.match(text, /MULAI DI SINI · hari terbaru yang cerah/);
   assert.match(
     text,
-    /Daily overview for today may still be empty until the pass/,
+    /Ringkasan harian untuk hari ini mungkin belum memiliki citra/,
   );
-  assert.match(text, /Daily overview shows little detail in a box this small/);
+  assert.match(
+    text,
+    /Ringkasan harian menampilkan sedikit detail pada area sekecil ini/,
+  );
   assert.match(text, /NASA GIBS/);
   const toggle = f.byAction('toggle-empty');
   assert.equal(toggle.disabled, true, 'nothing hidden yet');
   f.thumbnails.probe(L16, 'empty');
-  assert.equal(toggle.textContent, 'SHOW EMPTY DAYS · 1');
+  assert.equal(toggle.textContent, 'TAMPILKAN HARI KOSONG · 1');
   toggle.click();
   assert.equal(f.snap().showUnavailable, true);
-  assert.equal(toggle.textContent, 'HIDE EMPTY DAYS');
+  assert.equal(toggle.textContent, 'SEMBUNYIKAN HARI KOSONG');
   header.click();
   assert.equal(article.dataset.open, 'false');
 });

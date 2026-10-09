@@ -525,7 +525,7 @@ test('refresh failure removes cached matches and reports simulated flow', async 
   assert.equal(controls.getStats().flowCoveragePct, 0);
   assert.match(
     controls.getStats().loadingLabel,
-    /SIMULATED — TomTom daily budget reached/,
+    /DISIMULASIKAN — batas harian TomTom tercapai/,
   );
   assert.equal(state._flowPending, 0);
 });

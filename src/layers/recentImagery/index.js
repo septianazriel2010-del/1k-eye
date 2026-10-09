@@ -46,10 +46,12 @@ export const SPLIT_PUBLISH_MS = 400;
 /** The three modes, in share-link order (`m` = index). */
 export const MODES = Object.freeze(['image', 'basemap', 'ab']);
 
-const COMPARISON_IN_USE = 'Comparison in use by another scene';
-const COMPARISON_UNAVAILABLE = 'Esri map unavailable · no swipe';
-const COMPARISON_NEEDS_GLOBE = 'Swipe needs a globe map';
-const ESRI_KEPT = 'Imagery stays on Esri · CLEAR to use Google 3D';
+const COMPARISON_IN_USE = 'Perbandingan sedang digunakan adegan lain';
+const COMPARISON_UNAVAILABLE =
+  'Peta Esri tidak tersedia · usap tidak dapat digunakan';
+const COMPARISON_NEEDS_GLOBE = 'Usap memerlukan peta globe';
+const ESRI_KEPT =
+  'Citra tetap menggunakan Esri · HAPUS untuk memakai Google 3D';
 /** ZOOM IN's flight time, in seconds. */
 const ZOOM_FIT_SECONDS = 1.2;
 const DEFAULT_SPLIT = 0.5;
@@ -748,15 +750,18 @@ export function createRecentImageryLayer({
 
   function notes() {
     const out = [];
-    if (_truncated) out.push('Catalog truncated · a newer clear day may exist');
+    if (_truncated)
+      out.push('Katalog terpotong · mungkin ada hari cerah yang lebih baru');
     for (const error of _catalogErrors) {
       const label = PRODUCTS[error.product]?.label || error.product;
-      out.push(`${label} catalog unavailable · ${error.message}`);
+      out.push(`Katalog ${label} tidak tersedia · ${error.message}`);
     }
     const today = utcDay(now());
     const viirsToday = candidateFor(`VIIRS:${today}`);
     if (viirsToday?.availability === 'unknown' && _sources.viirs)
-      out.push('Daily overview for today may still be empty until the pass');
+      out.push(
+        'Ringkasan harian untuk hari ini mungkin belum memiliki citra hingga lintasan satelit berikutnya',
+      );
     return out;
   }
 
@@ -1227,7 +1232,7 @@ export function createRecentImageryLayer({
         _alpha = 1;
         for (const slotId of SLOT_IDS) renderer.setAlpha(slotId, 1);
       }
-      _notice = 'Box and images cleared';
+      _notice = 'Area dan citra dihapus';
       syncRender();
       publish([...BOX_EDGES, 'a', 'b', 'split']);
       notify();
@@ -1329,17 +1334,17 @@ export function createRecentImageryLayer({
         chips: [
           {
             id: 'hls',
-            label: 'MORE DETAIL · 30 m',
+            label: 'DETAIL LEBIH BAIK · 30 m',
             active: _sources.hls,
-            title: 'Sentinel-2 and Landsat via HLS, 30 m, every 2–6 days',
+            title: 'Sentinel-2 dan Landsat melalui HLS, 30 m, setiap 2–6 hari',
             params: { hls: !_sources.hls },
           },
           {
             id: 'viirs',
-            label: 'DAILY OVERVIEW · 250 m',
+            label: 'RINGKASAN HARIAN · 250 m',
             active: _sources.viirs,
             title:
-              'VIIRS daily mosaic, 250 m, follows broad changes; little detail under 25 km',
+              'Mosaik harian VIIRS, 250 m, mengikuti perubahan luas; detail terbatas di bawah 25 km',
             params: { viirs: !_sources.viirs },
           },
         ],

@@ -47,8 +47,8 @@ test('keyless traffic names the mode and the remedy, loading or idle', () => {
   assert.equal(idle.error, null);
   assert.equal(loading.error, null);
   // One terse line in both states; the chip's progress text carries "working".
-  assert.equal(idle.loadingLabel, 'SIMULATED — add TomTom key for live');
-  assert.equal(loading.loadingLabel, 'SIMULATED — add TomTom key for live');
+  assert.equal(idle.loadingLabel, 'DISIMULASIKAN — tambahkan kunci TomTom untuk data langsung');
+  assert.equal(loading.loadingLabel, 'DISIMULASIKAN — tambahkan kunci TomTom untuk data langsung');
 });
 
 test('no keyless label ever implies a live feed', () => {
@@ -61,14 +61,14 @@ test('no keyless label ever implies a live feed', () => {
   ].map((feed) => feed.loadingLabel);
   for (const label of labels) {
     assert.ok(!LIVE_CLAIM.test(label), `label implies live data: ${label}`);
-    assert.ok(label.startsWith('SIMULATED'), `fallback label must lead with the mode: ${label}`);
+    assert.ok(label.startsWith('DISIMULASIKAN'), `fallback label must lead with the mode: ${label}`);
   }
 });
 
 test('simulating because the status probe failed reads differently from keyless by design', () => {
   const probeDown = trafficFeedPresentation({ statusUnavailable: true });
   assert.equal(probeDown.mode, 'sim');
-  assert.equal(probeDown.loadingLabel, 'SIMULATED — traffic service unreachable');
+  assert.equal(probeDown.loadingLabel, 'DISIMULASIKAN — layanan lalu lintas tidak dapat dijangkau');
 });
 
 test('a healthy keyed layer reports live flow with its real coverage', () => {
@@ -76,11 +76,11 @@ test('a healthy keyed layer reports live flow with its real coverage', () => {
   assert.deepEqual(idle, {
     mode: 'live',
     error: null,
-    loadingLabel: 'LIVE · Roads: OpenStreetMap · Flow: TomTom · 87% cov · Unmatched: simulated',
+    loadingLabel: 'LANGSUNG · Jalan: OpenStreetMap · Arus: TomTom · Cakupan 87% · Tidak cocok: disimulasikan',
   });
   assert.equal(
     trafficFeedPresentation({ liveMode: true, fetching: true }).loadingLabel,
-    'Syncing flow · Roads: OpenStreetMap · Flow: TomTom · Unmatched: simulated',
+    'Menyinkronkan arus · Jalan: OpenStreetMap · Arus: TomTom · Tidak cocok: disimulasikan',
   );
 });
 
@@ -92,7 +92,7 @@ test('a mid-session flow outage degrades instead of reporting stale live coverag
   });
   // error and loadingLabel are ONE string: the manager's error branch renders
   // `error` and drops `loadingLabel`, so the copy has to live in both.
-  assert.equal(down.error, 'SIMULATED — TomTom daily budget reached');
+  assert.equal(down.error, 'DISIMULASIKAN — batas harian TomTom tercapai');
   assert.equal(down.loadingLabel, down.error);
   assert.ok(!down.loadingLabel.includes('87'));
   const busy = trafficFeedPresentation({
@@ -111,7 +111,7 @@ test('the rendered steady-state meta line carries the SIMULATED copy', () => {
       source: 'OpenStreetMap',
       stats: stats(trafficFeedPresentation({ liveMode: false })),
     }),
-    'FALLBACK · OpenStreetMap · SIMULATED — add TomTom key for live',
+    'CADANGAN · OpenStreetMap · DISIMULASIKAN — tambahkan kunci TomTom untuk data langsung',
   );
   assert.equal(
     mgr._buildMetaText({
@@ -121,7 +121,7 @@ test('the rendered steady-state meta line carries the SIMULATED copy', () => {
         flowError: 'TomTom daily budget reached',
       })),
     }),
-    'DEGRADED · OpenStreetMap · SIMULATED — TomTom daily budget reached',
+    'TERGANGGU · OpenStreetMap · DISIMULASIKAN — batas harian TomTom tercapai',
   );
 });
 
@@ -163,7 +163,7 @@ test('traffic can be destroyed before its first enable and destroyed repeatedly'
 test('zero matched dots never claims live coverage', () => {
   const feed = trafficFeedPresentation({ liveMode: true, coveragePct: 0 });
   assert.equal(feed.mode, 'live');
-  assert.match(feed.loadingLabel, /^SIMULATED/);
-  assert.match(feed.loadingLabel, /TomTom \(no matches\)/);
+  assert.match(feed.loadingLabel, /^DISIMULASIKAN/);
+  assert.match(feed.loadingLabel, /TomTom \(tidak ada kecocokan\)/);
   assert.ok(!LIVE_CLAIM.test(feed.loadingLabel));
 });

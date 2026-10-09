@@ -20,7 +20,7 @@ const KM_PER_DEG_LAT = 111.32;
 const QUANTUM = 100000;
 const DAY_MS = 86_400_000;
 const PRODUCT_ORDER = ['S30', 'L30', 'VIIRS'];
-const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+const MONTHS = 'Jan Feb Mar Apr Mei Jun Jul Agu Sep Okt Nov Des'.split(' ');
 
 /**
  * Keyless, browser-direct imagery products. HLS products are searched via
@@ -32,7 +32,7 @@ export const PRODUCTS = Object.freeze({
     label: 'HLS S30',
     name: 'Sentinel-2',
     source: 'hls',
-    sensor: 'Sentinel-2 via HLS',
+    sensor: 'Sentinel-2 melalui HLS',
     resolutionM: 30,
     gibsLayer: 'HLS_S30_Nadir_BRDF_Adjusted_Reflectance',
     maxLevel: 12,
@@ -44,7 +44,7 @@ export const PRODUCTS = Object.freeze({
     label: 'HLS L30',
     name: 'Landsat 8/9',
     source: 'hls',
-    sensor: 'Landsat 8/9 via HLS',
+    sensor: 'Landsat 8/9 melalui HLS',
     resolutionM: 30,
     gibsLayer: 'HLS_L30_Nadir_BRDF_Adjusted_Reflectance',
     maxLevel: 12,
@@ -54,7 +54,7 @@ export const PRODUCTS = Object.freeze({
   }),
   VIIRS: Object.freeze({
     label: 'VIIRS',
-    name: 'Daily overview',
+    name: 'Ringkasan harian',
     source: 'viirs',
     sensor: 'VIIRS NOAA-21',
     resolutionM: 250,
@@ -134,7 +134,7 @@ export function validateBox(box) {
       `Imagery stops at ±${MERCATOR_LAT_LIMIT.toFixed(2)}° latitude`,
     );
   if (east === west || north === south)
-    return refuse('degenerate', 'Box must enclose an area');
+    return refuse('degenerate', 'Area harus memiliki luas');
   const { width, height } = boxSideKm(normalized);
   if (width > MAX_BOX_SIDE_KM || height > MAX_BOX_SIDE_KM)
     return refuse('too-large', tooLargeMessage(Math.max(width, height)));
@@ -145,12 +145,12 @@ const formatKm = (km) => Math.round(Number(km) || 0).toLocaleString('en-US');
 
 // One short line each: the panel's hint says what to do about it.
 function tooLargeMessage(sideKm) {
-  return `Box is ${formatKm(sideKm)} km wide · limit ${formatKm(MAX_BOX_SIDE_KM)} km`;
+  return `Area selebar ${formatKm(sideKm)} km · batas ${formatKm(MAX_BOX_SIDE_KM)} km`;
 }
 
 /** The refusal for USE VIEW when the camera sees more than the cap allows. */
 export function viewTooLargeMessage(sideKm) {
-  return `View is ${formatKm(sideKm)} km wide · limit ${formatKm(MAX_BOX_SIDE_KM)} km`;
+  return `Tampilan selebar ${formatKm(sideKm)} km · batas ${formatKm(MAX_BOX_SIDE_KM)} km`;
 }
 
 /**
@@ -486,15 +486,15 @@ function daysAgoLabel(day, now) {
     (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${day}T00:00:00Z`)) /
       DAY_MS,
   );
-  if (delta <= 0) return 'today';
-  return delta === 1 ? 'yesterday' : `${delta} days ago`;
+  if (delta <= 0) return 'hari ini';
+  return delta === 1 ? 'kemarin' : `${delta} hari lalu`;
 }
 
 function cloudLabel(cloud) {
-  if (!cloud) return 'cloud unknown';
+  if (!cloud) return 'tutupan awan tidak diketahui';
   const min = Math.round(cloud.min);
   const max = Math.round(cloud.max);
-  return min === max ? `${min}% scene cloud` : `${min}–${max}% scene cloud`;
+  return min === max ? `${min}% awan` : `${min}–${max}% awan`;
 }
 
 /**
@@ -521,7 +521,7 @@ export function formatCandidateReadout(candidate, now = new Date()) {
   const ago = daysAgoLabel(candidate.day, now);
   if (ago) parts.push(ago);
   parts.push(product.sensor, `${product.resolutionM} m`);
-  if (product.overview) parts.push('overview');
+  if (product.overview) parts.push('ringkasan');
   parts.push(cloudLabel(candidate.cloud));
   return parts.join(' · ');
 }

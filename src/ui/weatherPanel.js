@@ -15,7 +15,7 @@ const OBSERVED = new Set(ORDER.slice(2));
 const utc = (time) =>
   Number.isFinite(Date.parse(time))
     ? `${new Date(time).toISOString().slice(5, 16).replace('T', ' ')} UTC`
-    : 'Unavailable';
+    : 'Tidak tersedia';
 const age = (time) => {
   const minutes = Math.max(
     0,
@@ -63,7 +63,7 @@ export function createWeatherPanel({
   const root = document.createElement('section');
   root.className = 'weather-readout';
   root.hidden = true;
-  root.setAttribute('aria-label', 'Active weather');
+  root.setAttribute('aria-label', 'Cuaca aktif');
   const timelineHost = document.createElement('div');
   timelineHost.className = 'weather-timeline-block';
   timelineHost.hidden = true;
@@ -71,10 +71,10 @@ export function createWeatherPanel({
   cardsHost.className = 'weather-cards';
   const observedGroup = document.createElement('section');
   observedGroup.className = 'weather-observed-group';
-  observedGroup.setAttribute('aria-label', 'Observed history');
+  observedGroup.setAttribute('aria-label', 'Riwayat pengamatan');
   const heading = document.createElement('h3');
   heading.className = 'panel-title';
-  heading.textContent = 'Observed history';
+  heading.textContent = 'Riwayat pengamatan';
   const scope = document.createElement('div');
   scope.className = 'weather-observed-scope';
   const observedCardsHost = document.createElement('div');
@@ -132,9 +132,9 @@ export function createWeatherPanel({
     const showTimeline = observed.length > 0;
     set(observedGroup, 'hidden', !showTimeline);
     const names = {
-      'weather-radar': 'Rain radar',
-      'weather-satellite': 'Satellite clouds',
-      'weather-lightning': 'Lightning density',
+      'weather-radar': 'Radar hujan',
+      'weather-satellite': 'Awan satelit',
+      'weather-lightning': 'Kepadatan petir',
     };
     set(scope, 'textContent', observed.map(({ id }) => names[id]).join(' · '));
     set(timelineHost, 'hidden', !showTimeline);
@@ -155,7 +155,7 @@ export function createWeatherPanel({
       disabled: !showTimeline || state.timeline.length < 2,
       readout:
         state.mode === 'latest'
-          ? 'LATEST · newest per product'
+          ? 'TERBARU · paling baru per produk'
           : historyTime(state.target),
     });
     const models = active.map(({ id, icon, summary, legend = [], list }) => {
@@ -165,7 +165,7 @@ export function createWeatherPanel({
         const shown = product?.shown ?? summary.shownTime;
         if (state.mode === 'history' && product?.selected === null) {
           const gap = summary.maxGapMinutes || 30;
-          detail = `No frame within ${gap < 60 ? `${gap} min` : `${gap / 60} h`} of ${utc(state.target).slice(6)}`;
+          detail = `Tidak ada bingkai dalam ${gap < 60 ? `${gap} menit` : `${gap / 60} jam`} dari ${utc(state.target).slice(6)}`;
         } else if (shown) {
           detail = dated(shown);
           if (state.mode === 'history')
@@ -175,8 +175,8 @@ export function createWeatherPanel({
                 : ' · nearest';
         }
       } else if (id === 'wind') {
-        detail = `Forecast · valid ${utc(summary.validTime)} · issued ${utc(summary.issuedTime)}`;
-        if (state.mode === 'history') detail += ' · Does not follow history';
+        detail = `Prakiraan · berlaku ${utc(summary.validTime)} · diterbitkan ${utc(summary.issuedTime)}`;
+        if (state.mode === 'history') detail += ' · Tidak mengikuti riwayat';
       }
       const lines = [
         { id: 'time', text: detail, muted: true },
@@ -222,7 +222,7 @@ export function createWeatherPanel({
           summary.status ||
           summary.compact ||
           (id === 'wind'
-            ? `Forecast · valid ${utc(summary.validTime)}`
+            ? `Prakiraan · berlaku ${utc(summary.validTime)}`
             : detail),
         compactStatus: Boolean(summary.status),
         blocks,
