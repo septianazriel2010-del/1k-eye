@@ -1,8 +1,8 @@
-# 🌐 1K Eye — Dunia dalam Jangkauan Mata
+# 1K-Eye — Dunia dalam Jangkauan Mata
 
 Simulator pemantauan dan intelijen berbasis web interaktif. Proyek ini menampilkan globe 3D fotorealistis yang dilengkapi data waktu nyata seperti penerbangan, kapal, satelit, gempa bumi, lalu lintas, dan kamera publik—serta kendali suara berbasis AI.
 
-**1K Eye — dunia dalam jangkauan mata.** Dibuat dan dikustomisasi khusus untuk web ini oleh **1K Eye**.
+**1K-Eye — dunia dalam jangkauan mata.**
 
 ---
 

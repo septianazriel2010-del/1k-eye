@@ -61,8 +61,8 @@ export async function createApplicationScene({
   configureCreditKeyboardAccess(document);
   loaderStatus.textContent =
     googleApiKey || googleTokens || cesiumToken
-      ? 'Loading Google 3D Tiles...'
-      : 'Loading the keyless globe...';
+      ? 'Memuat peta 3D Google...'
+      : 'Memuat globe...';
   const photoreal = await loadPhotorealisticTileset(Cesium, {
     googleApiKey,
     googleTokens,
@@ -90,12 +90,12 @@ export async function createApplicationScene({
         tileError,
       );
       const tileErrorDetail = describeError(tileError);
-      loaderStatus.textContent = `Google 3D Tiles unavailable (${tileErrorDetail}). Loading the keyless globe...`;
+      loaderStatus.textContent = `Google 3D Tiles tidak tersedia (${tileErrorDetail}). Memuat globe...`;
     }
     viewer.scene.globe.show = true;
   }
 
-  loaderStatus.textContent = 'Initializing systems...';
+  loaderStatus.textContent = 'Menyiapkan sistem...';
 
   const mapStackController = new MapController(viewer, {
     requestRender: governorRequestRender,

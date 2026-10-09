@@ -1,4 +1,4 @@
-/** Links that open God's Eye View at a view. */
+/** Links that open 1K-Eye at a view. */
 
 import { VIEW_PROPERTIES, createView, viewUrl } from '../../view/index.js';
 import { defineTool, ToolError } from '../catalog.js';
@@ -106,11 +106,11 @@ function appBase(services) {
 
 export const showInGodsEyeView = defineTool({
   name: 'show_in_gods_eye_view',
-  title: "Show in God's Eye View",
+  title: 'Tampilkan di 1K-Eye',
   description:
-    "Shows a view in God's Eye View: in clients that display apps, the live " +
-    "God's Eye View globe in the conversation; everywhere, a link that opens " +
-    'it. Pass the view another answer returned, or describe one: an area ' +
+    'Menampilkan tampilan di 1K-Eye: globe langsung di klien yang mendukung ' +
+    'aplikasi, atau tautan untuk membuka tampilan yang sama di peramban. ' +
+    'Kirim tampilan dari jawaban lain atau jelaskan area ' +
     'framed from above or a camera position, with chosen data layers, visual ' +
     'style and map, optionally following an aircraft (or riding in its ' +
     'cockpit view) or a satellite, and with marks drawn on the map.',
@@ -129,8 +129,12 @@ export const showInGodsEyeView = defineTool({
       tools,
     });
     const url = viewUrl(base, view);
+    const summaryLabel = label.replace(
+      /(\b\d+(?:\.\d+)? km) around\b/,
+      '$1 di sekitar',
+    );
     return {
-      summary: `Open ${label} in God's Eye View: ${url}`,
+      summary: `Buka ${summaryLabel} di 1K-Eye: ${url}`,
       data: { url, view },
     };
   },

@@ -151,7 +151,7 @@ export function resolveVoiceVisualizerSpeaker(
 export function resolveVoiceControlHint(pushToTalkMode, pushToTalkKeyHeld) {
   return pushToTalkMode && pushToTalkKeyHeld
     ? 'Release Space to send'
-    : 'Hold Space to speak · tap Space to activate focused controls';
+    : 'Tahan Spasi untuk berbicara · tekan Spasi untuk mengaktifkan kontrol yang dipilih';
 }
 
 /**

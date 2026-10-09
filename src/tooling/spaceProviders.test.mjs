@@ -6,11 +6,8 @@ import {
   rocketLaunchesProxy,
   launchLibraryRequestHeaders,
   LL2_CACHE_TTL_MS,
-} from 'gods-eye-view/server/providers/space';
-import {
-  celestrakTleUrl,
-  launchLibraryRecentUrl,
-} from 'gods-eye-view/sources/space';
+} from '1k-eye/server/providers/space';
+import { celestrakTleUrl, launchLibraryRecentUrl } from '1k-eye/sources/space';
 import * as compatibility from '../../server/providers/local.js';
 
 function install(plugin, preview = false) {

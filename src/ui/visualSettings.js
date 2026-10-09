@@ -1648,8 +1648,8 @@ export class VisualSettings {
     btn.setAttribute(
       'aria-label',
       enabled
-        ? `Detection overlay: ${String(modeLabel).toLowerCase()}`
-        : 'Detection overlay: off',
+        ? `Lapisan deteksi: ${String(modeLabel).toLowerCase()}`
+        : 'Lapisan deteksi: nonaktif',
     );
     btn.classList.remove('active', 'god', 'panoptic');
     if (modeLabel === 'SPARSE') {

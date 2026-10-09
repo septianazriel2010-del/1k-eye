@@ -278,7 +278,7 @@ test('Location markup provides one named native disclosure linked to its popover
   assert.equal(locationToggleAttributes['data-dock-toggle-target'], 'location-bar');
   assert.equal(locationToggleAttributes['aria-controls'], 'location-bar-popover');
   assert.equal(locationToggleAttributes['aria-expanded'], 'false');
-  assert.match(locationToggleAttributes['aria-label'], /expand.*location/i);
+  assert.match(locationToggleAttributes['aria-label'], /buka.*lokasi/i);
   assert.match(locationToggleAttributes.class, /(?:^|\s)dock-tray-toggle(?:\s|$)/);
   assert.match(locationToggleMarkup[2], /class="location-toolbar-label"/);
   assert.doesNotMatch(locationToggleMarkup[2], /<button\b/);
@@ -299,7 +299,7 @@ test('Location Enter stays immediate while Space waits for native key release', 
     }
     assert.equal(h.location.classList.contains('collapsed'), false);
     assert.equal(h.locationDisclosure.getAttribute('aria-expanded'), 'true');
-    assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Collapse LOCATION');
+    assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Ciutkan LOKASI');
     assert.equal(h.document.activeElement, h.locationDisclosure);
     assert.equal(h.timers.size, 0);
     assert.equal(h.calls(), 0);
@@ -314,7 +314,7 @@ test('Location Enter stays immediate while Space waits for native key release', 
     h.locationKey(key);
     if (key === ' ') h.locationKeyUp(key);
     assert.equal(h.location.classList.contains('collapsed'), true);
-    assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Expand LOCATION');
+    assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Buka LOKASI');
   }
 });
 
@@ -329,8 +329,8 @@ test('Location synthesized click and Escape retain focus and its accessible name
   assert.equal(escape.defaultPrevented, true);
   assert.equal(h.location.classList.contains('collapsed'), true);
   assert.equal(h.locationDisclosure.getAttribute('aria-expanded'), 'false');
-  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Expand LOCATION');
-  assert.equal(h.locationDisclosure.title, 'Expand LOCATION');
+  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Buka LOKASI');
+  assert.equal(h.locationDisclosure.title, 'Buka LOKASI');
   assert.equal(h.document.activeElement, h.locationDisclosure);
   h.drain();
   assert.equal(h.calls(), 0);
@@ -370,14 +370,14 @@ test('Location restoration syncs its real name without claiming focus, collapsin
   h.manager.setPanelCollapsed('location-bar', false, { restore: true, persist: false, syncShare: false });
   assert.equal(h.panel.classList.contains('collapsed'), false);
   assert.equal(h.location.classList.contains('collapsed'), false);
-  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Collapse LOCATION');
+  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Ciutkan LOKASI');
   assert.equal(h.document.activeElement, h.active);
   assert.equal(h.saves.length, saves);
   assert.equal(h.claims.length, claims);
   assert.equal(h.shareSyncs(), shareSyncs);
   h.locationDisclosure.setAttribute('aria-label', 'stale');
   h.manager.setPanelCollapsed('location-bar', false, { restore: true, persist: false, syncShare: false });
-  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Collapse LOCATION', 'same-state synchronization keeps the Location name');
+  assert.equal(h.locationDisclosure.getAttribute('aria-label'), 'Ciutkan LOKASI', 'same-state synchronization keeps the Location name');
   assert.equal(h.timers.size, 0);
 });
 

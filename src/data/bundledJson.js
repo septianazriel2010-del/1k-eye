@@ -31,7 +31,7 @@ export async function loadBundledJson(url, { signal } = {}) {
     const getBuiltinModule = globalThis.process?.getBuiltinModule;
     if (typeof getBuiltinModule !== 'function')
       throw new Error(
-        `God's Eye View needs Node 24.14 or newer to read ${url.pathname.split('/').pop()} (running ${globalThis.process?.version ?? 'an unknown runtime'})`,
+        `1K-Eye memerlukan Node 24.14 atau lebih baru untuk membaca ${url.pathname.split('/').pop()} (versi aktif ${globalThis.process?.version ?? 'tidak diketahui'})`,
       );
     const { readFileSync } = getBuiltinModule('node:fs');
     return JSON.parse(readFileSync(url, 'utf8'));

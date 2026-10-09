@@ -482,12 +482,12 @@ test('mic clicks are ignored while Space is physically held', () => {
 test('voice control help tray reflects the push-to-talk key state', () => {
   assert.equal(
     resolveVoiceControlHint(false, false),
-    'Hold Space to speak · tap Space to activate focused controls',
+    'Tahan Spasi untuk berbicara · tekan Spasi untuk mengaktifkan kontrol yang dipilih',
   );
   assert.equal(resolveVoiceControlHint(true, true), 'Release Space to send');
   assert.equal(
     resolveVoiceControlHint(true, false),
-    'Hold Space to speak · tap Space to activate focused controls',
+    'Tahan Spasi untuk berbicara · tekan Spasi untuk mengaktifkan kontrol yang dipilih',
   );
 });
 
@@ -3192,7 +3192,7 @@ test('F1: the toggle still records the next-session preference while live', () =
   assert.equal(controller.voiceTier, 'mini');
   assert.equal(ui.tierButton.textContent, 'MINI');
   // ...and says so, rather than implying the live session switched.
-  assert.match(ui.tierButton.title, /this session stays on/i);
+  assert.match(ui.tierButton.title, /sesi ini tetap memakai/i);
 });
 
 test('F1: when idle, toggling does re-price the preview meter', () => {

@@ -35,8 +35,9 @@ export function createVoiceCommands({
   if (ui.tierButton) ui.tierButton.hidden = !capabilities.costControls;
   if (ui.costValue) ui.costValue.hidden = !capabilities.costControls;
   if (!capabilities.pushToTalk) {
-    ui.button.setAttribute('aria-label', 'Toggle voice control');
-    if (ui.helpDetail) ui.helpDetail.textContent = 'Activate to toggle voice';
+    ui.button.setAttribute('aria-label', 'Ubah status kontrol suara');
+    if (ui.helpDetail)
+      ui.helpDetail.textContent = 'Aktifkan untuk mengubah status suara';
   }
   // Retain the existing controller's inspection surface for browser tools.
   const controls = adapter.controller || session;
@@ -47,7 +48,8 @@ export function createVoiceCommands({
     ui.status.textContent =
       event.state === 'idle' ? 'OFF' : event.state.toUpperCase();
     ui.detail.textContent =
-      event.detail || (event.state === 'idle' ? 'Voice off' : 'Voice active');
+      event.detail ||
+      (event.state === 'idle' ? 'Suara nonaktif' : 'Suara aktif');
     ui.button.setAttribute('aria-pressed', String(session.isActive()));
     if (ui.errorDetail)
       ui.errorDetail.textContent =

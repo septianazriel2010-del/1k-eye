@@ -1,5 +1,5 @@
 /**
- * Tools that answer questions from God's Eye View data, independent of the
+ * Tools that answer questions from 1K-Eye data, independent of the
  * surface that exposes them. See docs/TOOLS.md.
  */
 

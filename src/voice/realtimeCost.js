@@ -50,17 +50,17 @@ export class RealtimeCost {
       const pendingId = resolveVoiceModel(pendingTier).id;
       this.ui.tierButton.title =
         this.isActive() && state.modelId !== pendingId
-          ? `Next session: ${pendingId} — this session stays on ${state.modelId}`
-          : `Voice model: ${pendingId} — click to switch to ${
-              isMini ? 'standard' : 'mini'
-            }; applies next session`;
+          ? `Sesi berikutnya: ${pendingId} — sesi ini tetap memakai ${state.modelId}`
+          : `Model suara: ${pendingId} — klik untuk beralih ke ${
+              isMini ? 'standar' : 'mini'
+            }; berlaku pada sesi berikutnya`;
     }
     if (this.ui?.costValue) {
       this.ui.costValue.textContent = state.display;
       this.ui.costValue.dataset.level = state.level;
       this.ui.costValue.title =
-        `Estimated session cost on ${state.modelId} — ${state.responses} response(s). ` +
-        `Warns at ${formatCostUsd(state.warnUsd)}, ends the session at ${formatCostUsd(state.capUsd)}.` +
+        `Perkiraan biaya sesi ${state.modelId} — ${state.responses} respons. ` +
+        `Peringatan pada ${formatCostUsd(state.warnUsd)}, sesi berakhir pada ${formatCostUsd(state.capUsd)}.` +
         (state.note ? ` ${state.note}` : '');
     }
   }

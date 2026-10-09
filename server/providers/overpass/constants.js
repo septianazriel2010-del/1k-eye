@@ -5,7 +5,7 @@ import path from 'node:path';
 // ---------------------------------------------------------------------------
 /** Stable application identity for operator-configured Overpass instances. */
 const OVERPASS_USER_AGENT =
-  'gods-eye-view/0.1 (+https://github.com/bilawalsidhu/gods-eye-view)';
+  '1k-eye/0.1 (+https://github.com/septianazriel2010-del/1k-eye)';
 
 /** Parse only operator-supplied HTTP(S) endpoints; private instances are allowed. */
 function parseOverpassUpstreams(raw) {

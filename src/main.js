@@ -8,7 +8,7 @@ const application = createStandaloneApplication({
 });
 
 application.start().catch((error) => {
-  console.error('Inisialisasi 1K Eye gagal:', error);
+  console.error('Inisialisasi 1K-Eye gagal:', error);
   const loaderStatus = document.querySelector('#loading-screen .loader-status');
   loaderStatus.textContent = `Terjadi kesalahan: ${describeError(error)}`;
   loaderStatus.style.color = '#ff4444';

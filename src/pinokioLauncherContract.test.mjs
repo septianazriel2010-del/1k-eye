@@ -117,31 +117,31 @@ test('Pinokio menu resolves the nested install marker and exposes each lifecycle
   };
 
   assert.deepEqual(await render({ installed: false }), [
-    { text: 'Install', href: 'install.js', default: true },
+    { text: 'Pasang', href: 'install.js', default: true },
   ]);
   assert.deepEqual(await render({ installed: true }), [
-    { text: 'Start', href: 'start.js', default: true },
-    { text: 'Update', href: 'update.js', default: false },
-    { text: 'Repair installation', href: 'reset.js', default: false },
+    { text: 'Jalankan', href: 'start.js', default: true },
+    { text: 'Perbarui', href: 'update.js', default: false },
+    { text: 'Perbaiki instalasi', href: 'reset.js', default: false },
   ]);
   for (const [running, text] of [
-    ['install.js', 'Installing'],
-    ['update.js', 'Updating'],
-    ['reset.js', 'Resetting'],
+    ['install.js', 'Memasang'],
+    ['update.js', 'Memperbarui'],
+    ['reset.js', 'Memulihkan'],
   ]) {
     assert.deepEqual(await render({ installed: true, running }), [
       { text, href: running, default: true },
     ]);
   }
   assert.deepEqual(await render({ installed: true, running: 'start.js' }), [
-    { text: 'Starting', href: 'start.js', default: true },
+    { text: 'Memulai', href: 'start.js', default: true },
   ]);
   assert.deepEqual(await render({
     installed: true,
     running: 'start.js',
     url: 'http://127.0.0.1:4173/',
   }), [
-    { text: "Open God's Eye View", href: 'http://127.0.0.1:4173/', default: true },
+    { text: 'Buka 1K-Eye', href: 'http://127.0.0.1:4173/', default: true },
     { text: 'Server', href: 'start.js', default: false },
   ]);
   assert.ok(existsCalls.length >= 7);

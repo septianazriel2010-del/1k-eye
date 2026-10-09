@@ -1,14 +1,14 @@
-# Contributing to God's Eye View
+# Berkontribusi ke 1K-Eye
 
-Thanks for being here. God's Eye View is an open foundation for live spatial intelligence in the browser, and it gets better when more people run it, break it, and extend it.
+Terima kasih sudah ikut mengembangkan 1K-Eye. Proyek ini menjelajahi data spasial publik secara langsung di peramban.
 
-## Getting set up
+## Persiapan
 
 Use Node.js 24.14.x or 26.x (also enforced by `package.json`).
 
 ```bash
-git clone https://github.com/bilawalsidhu/gods-eye-view.git
-cd gods-eye-view
+git clone https://github.com/septianazriel2010-del/1k-eye.git
+cd 1k-eye
 nvm install 24.14.0
 nvm use 24.14.0
 npm install
@@ -117,7 +117,7 @@ The highest-leverage places to jump in:
 
 - **No framework.** Vanilla JS + [CesiumJS](https://cesium.com/platform/cesiumjs/) + [Vite](https://vitejs.dev/).
 - **Assembly lives in `src/app/`; standalone defaults live in `src/standalone/`.** UI controllers live in `src/ui/`, layer factories in `src/layers/`, portable sources in `src/sources/`, and application operations in `src/services/`. Existing `src/ui.js` and `src/data/<layer>.js` entries retain compatibility; new code belongs with its focused owner.
-- Sources acquire records; renderers own Cesium resources. Import `gods-eye-view/layers/<family>/source` when only a source factory is needed. Common voice controls consume the session interface; protocol adapters own connection details.
+- Sumber mengambil data; renderer mengelola resource Cesium. Impor `1k-eye/layers/<family>/source` jika hanya membutuhkan factory sumber. Kontrol suara menggunakan antarmuka sesi, sedangkan adaptor protokol mengelola koneksi.
 - **Secrets stay server-side.** Anything needing a private key goes through a local proxy under `server/providers/`. The browser only ever sees the Google Maps key (which you restrict) and ephemeral tokens.
 - `docs/CURRENT-STATE.md` is the authoritative runtime reference — read it first.
 
@@ -153,12 +153,9 @@ ownership and adoption process.
 4. If you add or change a data source, update [DATA_SOURCES.md](DATA_SOURCES.md) with its license and attribution. **Don't add data you don't have the right to redistribute** — fetch it at runtime instead.
 5. Describe what you changed and how you verified it (screenshots welcome for anything visual).
 
-## Maintainers
+## Pemeliharaan
 
-God's Eye View is maintained by [Bilawal Sidhu](https://github.com/bilawalsidhu)
-and [Sameh Khamis](https://github.com/samehkhamis) at
-[Halfpixel](https://halfpixel.ai). Either maintainer can review and merge
-contributions.
+Lihat pemilik repositori 1K-Eye untuk informasi pemeliharaan dan peninjauan kontribusi.
 
 ## Ground rules
 

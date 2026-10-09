@@ -1,4 +1,4 @@
-# God's Eye View — Testing Guide (voice map-annotation whiteboard + live tracking)
+# 1K-Eye — Panduan Pengujian (anotasi peta suara dan pelacakan langsung)
 
 > [!NOTE]
 > This is a **manual field-test scenario script** for the June-2026 whiteboard +

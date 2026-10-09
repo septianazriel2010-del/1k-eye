@@ -1,5 +1,5 @@
 /**
- * The God's Eye View panel's requests. A panel cannot reach the app's server
+ * The 1K-Eye panel's requests. A panel cannot reach the app's server
  * itself: hosts serve panels from their own sites and may refuse other
  * addresses, such as a server on the user's machine. The panel asks this
  * tool instead, and it requests the path from the app's server. Large
@@ -237,10 +237,10 @@ function checkedPath(path, baseUrl) {
 
 export const panelRequest = defineTool({
   name: PANEL_REQUEST_TOOL,
-  title: "God's Eye View panel request",
+  title: 'Permintaan panel 1K-Eye',
   description:
-    "Loads a file or data for the God's Eye View panel from the app's " +
-    'server. Only the panel calls this; it does not answer questions.',
+    'Memuat berkas atau data untuk panel 1K-Eye dari server aplikasi. ' +
+    'Hanya panel yang menggunakan alat ini; alat ini tidak menjawab pertanyaan.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -272,7 +272,7 @@ export const panelRequest = defineTool({
     if (!isPanelKey(args.key, services.app.panelKey))
       throw new ToolError(
         'invalid_arguments',
-        "Only the God's Eye View panel may make this request",
+        'Hanya panel 1K-Eye yang dapat membuat permintaan ini',
       );
     const state = panelState(services.app);
     forgetExpired(state);

@@ -6,15 +6,15 @@ const DAY_MS = 86_400_000;
 
 /** SINCE slider stops, in relative days so a share link keeps its meaning. */
 export const SINCE_STOPS = Object.freeze([
-  Object.freeze({ days: 0, label: 'ANY DATE' }),
-  Object.freeze({ days: 3652, label: 'LAST 10 YEARS' }),
-  Object.freeze({ days: 1826, label: 'LAST 5 YEARS' }),
-  Object.freeze({ days: 1095, label: 'LAST 3 YEARS' }),
-  Object.freeze({ days: 730, label: 'LAST 2 YEARS' }),
-  Object.freeze({ days: 365, label: 'LAST YEAR' }),
-  Object.freeze({ days: 182, label: 'LAST 6 MONTHS' }),
-  Object.freeze({ days: 91, label: 'LAST 3 MONTHS' }),
-  Object.freeze({ days: 30, label: 'LAST MONTH' }),
+  Object.freeze({ days: 0, label: 'KAPAN SAJA' }),
+  Object.freeze({ days: 3652, label: '10 TAHUN TERAKHIR' }),
+  Object.freeze({ days: 1826, label: '5 TAHUN TERAKHIR' }),
+  Object.freeze({ days: 1095, label: '3 TAHUN TERAKHIR' }),
+  Object.freeze({ days: 730, label: '2 TAHUN TERAKHIR' }),
+  Object.freeze({ days: 365, label: '1 TAHUN TERAKHIR' }),
+  Object.freeze({ days: 182, label: '6 BULAN TERAKHIR' }),
+  Object.freeze({ days: 91, label: '3 BULAN TERAKHIR' }),
+  Object.freeze({ days: 30, label: '1 BULAN TERAKHIR' }),
 ]);
 
 /** The exact stop for a day count, else the nearest one. */
@@ -34,13 +34,13 @@ export function sinceStopIndex(days) {
 function presentSince(days, now) {
   const value = Number(days) || 0;
   const index = sinceStopIndex(value);
-  if (value <= 0) return { index, days: 0, label: 'ANY DATE' };
+  if (value <= 0) return { index, days: 0, label: 'KAPAN SAJA' };
   const stop = SINCE_STOPS[index];
-  const window = stop.days === value ? stop.label : `LAST ${value} DAYS`;
+  const window = stop.days === value ? stop.label : `${value} HARI TERAKHIR`;
   return {
     index,
     days: value,
-    label: `${window} · SINCE ${formatDate(now - value * DAY_MS)}`,
+    label: `${window} · SEJAK ${formatDate(now - value * DAY_MS)}`,
   };
 }
 
@@ -55,16 +55,18 @@ function formatDate(ms) {
 
 function presentStatus(state) {
   const pressed = state.enabled === true;
-  const title = pressed ? 'Turn Street Level off' : 'Turn Street Level on';
+  const title = pressed
+    ? 'Nonaktifkan tampilan tingkat jalan'
+    : 'Aktifkan tampilan tingkat jalan';
   if (state.keyRejected)
-    return { text: 'KEY REJECTED', tone: 'warn', pressed, title };
+    return { text: 'KUNCI DITOLAK', tone: 'warn', pressed, title };
   if (state.keyRequired)
-    return { text: 'KEY REQUIRED', tone: 'warn', pressed, title };
+    return { text: 'KUNCI DIPERLUKAN', tone: 'warn', pressed, title };
   if (state.coverage.loading)
-    return { text: 'LOADING', tone: 'busy', pressed, title };
+    return { text: 'MEMUAT', tone: 'busy', pressed, title };
   return pressed
-    ? { text: 'ON', tone: 'on', pressed, title }
-    : { text: 'OFF', tone: '', pressed, title };
+    ? { text: 'AKTIF', tone: 'on', pressed, title }
+    : { text: 'NONAKTIF', tone: '', pressed, title };
 }
 
 /** A chip is lit only while the layer and its provider are both on. */
@@ -73,7 +75,7 @@ function presentProviders(state) {
   return (state.providers || []).map((provider) => {
     const keyRequired = provider.keyRequired === true;
     const on = enabled && provider.on === true;
-    let title = `${provider.name} imagery ${on ? 'on' : 'off'}`;
+    let title = `${provider.name}: citra ${on ? 'aktif' : 'nonaktif'}`;
     if (provider.keyRejected && provider.error)
       title = `${provider.name}: ${provider.error}`;
     else if (keyRequired && provider.requiresKeyId)
@@ -118,20 +120,20 @@ function presentViewer(state) {
       disabled: street.open !== true || street.followAvailable !== true,
       title:
         street.followAvailable === true
-          ? 'Camera follows view: move the globe camera wherever the street-level view looks'
-          : 'Camera follow needs the Google 3D map: choose Google 3D under MAP SOURCE',
+          ? 'Kamera mengikuti tampilan: arahkan kamera globe ke arah tampilan tingkat jalan'
+          : 'Ikuti kamera memerlukan peta Google 3D: pilih Google 3D pada Sumber peta',
     },
   };
 }
 
 function presentMeta(state) {
-  if (!state.enabled) return 'Switch a provider on to draw its coverage.';
+  if (!state.enabled) return 'Aktifkan penyedia untuk menampilkan cakupannya.';
   if (state.sequence.selectedId)
     return state.sequence.loading
-      ? 'Loading this sequence…'
-      : `${state.sequence.images.toLocaleString()} images in this sequence · Esc clears`;
+      ? 'Memuat rangkaian ini…'
+      : `${state.sequence.images.toLocaleString()} gambar dalam rangkaian ini · Esc untuk menghapus`;
   if (state.coverage.count > 0)
-    return `${state.coverage.count.toLocaleString()} sequences in view · click a line for its photos`;
+    return `${state.coverage.count.toLocaleString()} rangkaian terlihat · klik garis untuk melihat fotonya`;
   return state.coverage.hint || '';
 }
 

@@ -237,7 +237,7 @@ export class RealtimeViewport {
         content: [
           {
             type: 'input_text',
-            text: "Current God's Eye View viewport screenshot. Read any clearly visible street, building, and place labels in the image and combine them with the structured nearbyPlaces, streetLabels, and scene context. Do not invent labels that are not legible.",
+            text: 'Tangkapan layar area 1K-Eye saat ini. Baca nama jalan, gedung, dan tempat yang terlihat jelas, lalu padukan dengan nearbyPlaces, streetLabels, dan konteks adegan. Jangan mengarang label yang tidak terbaca.',
           },
           {
             type: 'input_image',

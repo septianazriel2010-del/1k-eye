@@ -61,7 +61,7 @@ function deepMerge(target, source) {
 test('a key-gated layer disables every control and flags KEY REQUIRED', () => {
   const view = presentStreetLevelPanel(snapshot({ keyRequired: true }));
   assert.equal(view.controlsDisabled, true);
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, 'KUNCI DIPERLUKAN');
   assert.equal(view.status.tone, 'warn');
 });
 
@@ -74,7 +74,7 @@ test('KEY REQUIRED shows no raw error code under the pill', () => {
       providers: [provider({ keyRequired: true, error: 'no_key' })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REQUIRED');
+  assert.equal(view.status.text, 'KUNCI DIPERLUKAN');
   assert.equal(view.error, null);
   // The chip still says how to add the key.
   assert.match(view.providers[0].title, /^Mapillary: Needs /);
@@ -92,7 +92,7 @@ test('a key Mapillary rejected reads KEY REJECTED and names the fix', () => {
       providers: [provider({ keyRequired: true, keyRejected: true, error })],
     }),
   );
-  assert.equal(view.status.text, 'KEY REJECTED');
+  assert.equal(view.status.text, 'KUNCI DITOLAK');
   assert.equal(view.status.tone, 'warn');
   assert.equal(view.controlsDisabled, true);
   assert.equal(view.error, error);
@@ -107,37 +107,42 @@ test('a key problem outranks loading on the pill: KEY REJECTED, then KEY REQUIRE
   assert.equal(
     presentStreetLevelPanel(snapshot({ ...loading, keyRequired: true })).status
       .text,
-    'KEY REQUIRED',
+    'KUNCI DIPERLUKAN',
   );
   assert.equal(
     presentStreetLevelPanel(
       snapshot({ ...loading, keyRequired: true, keyRejected: true }),
     ).status.text,
-    'KEY REJECTED',
+    'KUNCI DITOLAK',
   );
 });
 
 test('the header pill is the on/off switch and reads OFF, LOADING or ON', () => {
   assert.deepEqual(presentStreetLevelPanel(snapshot()).status, {
-    text: 'OFF',
+    text: 'NONAKTIF',
     tone: '',
     pressed: false,
-    title: 'Turn Street Level on',
+    title: 'Aktifkan tampilan tingkat jalan',
   });
   assert.deepEqual(
     presentStreetLevelPanel(
       snapshot({ enabled: true, coverage: { loading: true } }),
     ).status,
     {
-      text: 'LOADING',
+      text: 'MEMUAT',
       tone: 'busy',
       pressed: true,
-      title: 'Turn Street Level off',
+      title: 'Nonaktifkan tampilan tingkat jalan',
     },
   );
   assert.deepEqual(
     presentStreetLevelPanel(snapshot({ enabled: true })).status,
-    { text: 'ON', tone: 'on', pressed: true, title: 'Turn Street Level off' },
+    {
+      text: 'AKTIF',
+      tone: 'on',
+      pressed: true,
+      title: 'Nonaktifkan tampilan tingkat jalan',
+    },
   );
   assert.equal(
     presentStreetLevelPanel(snapshot({ enabled: true, keyRequired: true }))
@@ -187,7 +192,7 @@ test('one chip per provider: on, off, loading, and keyless as an error chip', ()
     ],
   );
   assert.equal(view.providers[0].label, 'MAPILLARY');
-  assert.equal(view.providers[1].title, 'Panoramax imagery off');
+  assert.equal(view.providers[1].title, 'Panoramax: citra nonaktif');
   assert.match(
     view.providers[3].title,
     /^Google Street View: Needs GOOGLE_MAPS_API_KEY/,
@@ -223,7 +228,7 @@ test('chips are dark while the layer is off, so the chip is the layer switch', (
     view.providers.map((chip) => [chip.id, chip.active, chip.state]),
     [['mapillary', false, 'idle']],
   );
-  assert.equal(view.providers[0].title, 'Mapillary imagery off');
+  assert.equal(view.providers[0].title, 'Mapillary: citra nonaktif');
   assert.equal(view.enableButton, undefined, 'no separate ON/OFF button');
   const keyless = presentStreetLevelPanel(
     snapshot({ providers: [provider({ keyRequired: true })] }),
@@ -253,7 +258,7 @@ test('the SINCE slider runs from any date on the left to the last month on the r
 test('the SINCE readout names the window and the cut-off date it means today', () => {
   const now = Date.UTC(2026, 8, 25);
   const any = presentStreetLevelPanel(snapshot(), { now });
-  assert.deepEqual(any.since, { index: 0, days: 0, label: 'ANY DATE' });
+  assert.deepEqual(any.since, { index: 0, days: 0, label: 'KAPAN SAJA' });
   const year = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'pano', sinceDays: 365 } }),
     { now },
@@ -262,14 +267,14 @@ test('the SINCE readout names the window and the cut-off date it means today', (
   assert.deepEqual(year.since, {
     index: 5,
     days: 365,
-    label: 'LAST YEAR · SINCE 2025-09-25',
+    label: '1 TAHUN TERAKHIR · SEJAK 2025-09-25',
   });
   const custom = presentStreetLevelPanel(
     snapshot({ filter: { pano: 'all', sinceDays: 400 } }),
     { now },
   );
   assert.equal(custom.since.index, 5);
-  assert.equal(custom.since.label, 'LAST 400 DAYS · SINCE 2025-08-21');
+  assert.equal(custom.since.label, '400 HARI TERAKHIR · SEJAK 2025-08-21');
 });
 
 test('legend passes through in the layer’s order', () => {
@@ -301,12 +306,12 @@ test('each provider chip carries its source colour', () => {
 test('the meta line never mixes the visible-sequence count with the selected sequence', () => {
   assert.equal(
     presentStreetLevelPanel(snapshot()).meta,
-    'Switch a provider on to draw its coverage.',
+    'Aktifkan penyedia untuk menampilkan cakupannya.',
   );
   const browsing = presentStreetLevelPanel(
     snapshot({ enabled: true, coverage: { count: 812 } }),
   );
-  assert.match(browsing.meta, /^812 sequences in view · click a line/);
+  assert.match(browsing.meta, /^812 rangkaian terlihat · klik garis/);
   const selected = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -314,8 +319,11 @@ test('the meta line never mixes the visible-sequence count with the selected seq
       sequence: { selectedId: 'abc', images: 33 },
     }),
   );
-  assert.equal(selected.meta, '33 images in this sequence · Esc clears');
-  assert.doesNotMatch(selected.meta, /sequences in view/);
+  assert.equal(
+    selected.meta,
+    '33 gambar dalam rangkaian ini · Esc untuk menghapus',
+  );
+  assert.doesNotMatch(selected.meta, /rangkaian terlihat/);
   const hinted = presentStreetLevelPanel(
     snapshot({
       enabled: true,
@@ -376,13 +384,13 @@ test('FOLLOW is disabled off Google 3D and says where to switch', () => {
   assert.equal(off3d.viewer.follow.disabled, true);
   assert.match(
     off3d.viewer.follow.title,
-    /needs the Google 3D map.*MAP SOURCE/,
+    /memerlukan peta Google 3D.*Sumber peta/,
   );
   const on3d = presentStreetLevelPanel(
     snapshot({ street: { ...open, followAvailable: true } }),
   );
   assert.equal(on3d.viewer.follow.disabled, false);
-  assert.match(on3d.viewer.follow.title, /^Camera follows view/);
+  assert.match(on3d.viewer.follow.title, /^Kamera mengikuti tampilan/);
   const closed = presentStreetLevelPanel(
     snapshot({ street: { open: false, followAvailable: true } }),
   );

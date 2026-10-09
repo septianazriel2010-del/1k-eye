@@ -1,0 +1,113 @@
+:root:not([data-ui-theme='cyber']) {
+  --glass-bg: rgba(19, 26, 28, 0.94);
+  --glass-border: rgba(226, 236, 233, 0.14);
+  --glass-border-hover: rgba(226, 236, 233, 0.28);
+  --accent: #8ab9a9;
+  --accent-dim: rgba(138, 185, 169, 0.12);
+  --accent-glow: rgba(138, 185, 169, 0.12);
+}
+
+:root:not([data-ui-theme='cyber']) #title-bar .title-glow {
+  display: none;
+}
+
+:root:not([data-ui-theme='cyber']) #title-bar h1 {
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+  text-shadow: none;
+}
+
+:root:not([data-ui-theme='cyber']) #title-bar .title-logo {
+  filter: none;
+}
+
+:root:not([data-ui-theme='cyber']) #top-center-actions button[aria-pressed='true'] {
+  box-shadow: none;
+}
+
+:root:not([data-ui-theme='cyber']) #command-dock {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+:root:not([data-ui-theme='cyber']) #command-dock > #location-bar,
+:root:not([data-ui-theme='cyber']) #command-dock > #control-panel {
+  border-color: var(--glass-border);
+}
+
+:root:not([data-ui-theme='cyber']) #command-dock > #gev-voice-control {
+  border-color: var(--glass-border);
+  border-radius: 6px;
+  background: rgba(138, 185, 169, 0.08);
+  box-shadow: none;
+}
+
+:root:not([data-ui-theme='cyber']) #first-run-launcher {
+  background: var(--glass-bg);
+  border-color: var(--glass-border);
+  border-radius: 8px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-scanline {
+  display: none;
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-header,
+:root:not([data-ui-theme='cyber']) .first-run-footer {
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-kicker,
+:root:not([data-ui-theme='cyber']) .first-run-choices button > .material-symbols-outlined:first-child,
+:root:not([data-ui-theme='cyber']) .first-run-arrow {
+  color: var(--accent);
+}
+
+:root:not([data-ui-theme='cyber']) #first-run-launcher h2,
+:root:not([data-ui-theme='cyber']) .first-run-choices strong,
+:root:not([data-ui-theme='cyber']) .first-run-note {
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+:root:not([data-ui-theme='cyber']) #first-run-launcher h2 {
+  font-weight: 600;
+}
+
+:root:not([data-ui-theme='cyber']) #first-run-description,
+:root:not([data-ui-theme='cyber']) .first-run-choices small,
+:root:not([data-ui-theme='cyber']) .first-run-suppress,
+:root:not([data-ui-theme='cyber']) .first-run-note {
+  color: var(--text-secondary);
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-choices button {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.025);
+  border-color: var(--glass-border);
+  border-radius: 6px;
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-choices button:hover,
+:root:not([data-ui-theme='cyber']) .first-run-choices button:focus-visible {
+  background: var(--accent-dim);
+  border-color: var(--glass-border-hover);
+  transform: none;
+}
+
+:root:not([data-ui-theme='cyber']) .first-run-suppress input {
+  accent-color: var(--accent);
+}
+
+:root:not([data-ui-theme='cyber']) #first-run-launcher[data-state='loading'] .first-run-note {
+  color: var(--accent);
+}

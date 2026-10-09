@@ -179,8 +179,8 @@ export class RadioControls {
         String(radioExpanded),
       );
       const label = radioExpanded
-        ? 'Go to expanded Radio section'
-        : 'Expand Radio section in Context';
+        ? 'Buka bagian Radio yang diperluas'
+        : 'Buka bagian Radio di Konteks';
       this._contextRadioToggleBtn.setAttribute('aria-label', label);
       this._contextRadioToggleBtn.title = label;
       return;
